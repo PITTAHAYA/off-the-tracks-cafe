@@ -146,6 +146,24 @@ p{margin:0 0 .9em}
 .fade{opacity:0;transform:scale(1.02);transition:opacity .6s var(--ease),transform .8s var(--ease)}
 .fade.ok{opacity:1;transform:none}
 
+/* install invitation — one line, dismissable, never shown twice */
+.install{
+  position:fixed;left:10px;right:10px;bottom:calc(var(--nav) + 10px);z-index:95;
+  display:flex;align-items:center;gap:10px;
+  padding:11px 12px 11px 16px;border-radius:100px;
+  background:var(--navy);color:var(--cream);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  box-shadow:0 6px 24px rgba(15,26,42,.32);
+  transform:translateY(120%);transition:transform .45s var(--ease-out);
+}
+.install.in{transform:none}
+.install span{flex:1;line-height:1.4}
+.install__go{
+  background:var(--terra);color:#fff;border-radius:100px;padding:8px 15px;
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;flex:none;
+}
+.install__x{width:30px;height:30px;color:rgba(246,241,231,.55);font-size:19px;flex:none}
+
 /* ═══════════════════════════════════════════════════════
    ORDERING + BOOKING
    Shared by order.js (cart, checkout) and reserve.js (tables).

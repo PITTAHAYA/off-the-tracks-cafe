@@ -309,6 +309,26 @@ if(shareBtn) shareBtn.onclick = async ()=>{
   if(navigator.share){ try{ await navigator.share(d); }catch(_){} }
   else { try{ await navigator.clipboard.writeText(location.href); toast("Link copied"); }catch(_){} }
 };
+/* ═══════════ feedback (visit page) ═══════════
+   No backend, so it composes a mail rather than pretending to store
+   anything. Two taps, against five fields on the old contact form. */
+(function(){
+  const send = $("#fbSend"); if(!send) return;
+  let mood = "";
+  $$(".mood__b").forEach(b=>b.onclick = ()=>{
+    $$(".mood__b").forEach(x=>x.setAttribute("aria-checked", x === b));
+    mood = b.dataset.mood;
+  });
+  send.onclick = ()=>{
+    const text = $("#fbText").value.trim();
+    if(!mood && !text){ $("#fbText").focus(); toast("Pick one or leave a note"); return; }
+    const body = (mood ? mood + ".\n\n" : "") + text;
+    location.href = "mailto:" + EMAIL +
+      "?subject=" + encodeURIComponent("Feedback" + (mood ? " — " + mood : "")) +
+      "&body=" + encodeURIComponent(body);
+  };
+})();
+
 /* Call buttons and the printed number stay hidden until PHONE is set */
 if(PHONE){
   $$("[data-call]").forEach(el=>{ el.href = "tel:"+PHONE; el.hidden = false; });
@@ -317,6 +337,42 @@ if(PHONE){
     el.textContent = pretty; el.href = "tel:"+PHONE; el.hidden = false;
   });
 }
+
+/* ═══════════ installable + works offline ═══════════
+   Granville Island signal is patchy and the building is timber and
+   steel. Once visited, the menu, hours and photos stay readable with
+   no connection — and the site can be added to the home screen like
+   an app, which is the difference between being bookmarked and being
+   forgotten. Needs https (or localhost); silently skips on file://. */
+if("serviceWorker" in navigator && location.protocol === "https:"){
+  addEventListener("load", ()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+
+/* Chrome/Edge/Android: offer the install once, unobtrusively.
+   iOS Safari has no such event — it uses Share ▸ Add to Home Screen. */
+let installEvent = null;
+addEventListener("beforeinstallprompt", e=>{
+  e.preventDefault(); installEvent = e;
+  if(localStorage.getItem("ott_install_done")) return;
+  const bar = document.createElement("div");
+  bar.className = "install";
+  bar.innerHTML = `
+    <span>Add Off the Tracks to your home screen</span>
+    <button class="install__go">Add</button>
+    <button class="install__x" aria-label="Not now">×</button>`;
+  document.body.appendChild(bar);
+  requestAnimationFrame(()=>bar.classList.add("in"));
+  const dismiss = ()=>{
+    bar.classList.remove("in");
+    setTimeout(()=>bar.remove(), 300);
+    try{ localStorage.setItem("ott_install_done","1"); }catch(_){}
+  };
+  bar.querySelector(".install__x").onclick = dismiss;
+  bar.querySelector(".install__go").onclick = async ()=>{
+    dismiss();
+    if(installEvent){ installEvent.prompt(); installEvent = null; }
+  };
+});
 
 /* ═══════════ shared API for order.js and reserve.js ═══════════
    Keeps hours, time formatting and the toast in one place so the

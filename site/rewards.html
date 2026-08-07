@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stamps — Off the Tracks</title>
+<meta name="description" content="Ten coffees at Off the Tracks and the eleventh is on us. No account, no plastic card.">
+<meta name="theme-color" content="#22402E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="app.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+<style>
+/* ── rewards only ──────────────────────────────────────── */
+body{background:var(--fir);color:var(--cream)}
+.top{background:rgba(34,64,46,.9);border-bottom-color:rgba(246,241,231,.14)}
+.top__name{color:var(--cream)}
+.status{border-color:rgba(246,241,231,.28);color:rgba(246,241,231,.85)}
+.status__dot{background:#8FCFA3}
+
+.head{padding:26px var(--pad) 0;max-width:var(--maxw);margin:0 auto}
+.head h1{font-size:clamp(34px,10vw,48px);color:var(--cream)}
+.head .eyebrow{color:var(--brass)}
+.head p{color:rgba(246,241,231,.68);font-size:15px;line-height:1.6;margin:12px 0 0;max-width:40ch}
+
+.wrapr{padding:26px var(--pad) 40px;max-width:520px;margin:0 auto}
+
+/* the card itself */
+.card{
+  background:var(--cream);color:var(--ink);border-radius:6px;padding:24px 22px 26px;
+  box-shadow:0 10px 34px rgba(10,20,14,.28);position:relative;overflow:hidden;
+}
+.card::after{                       /* perforated edge, like a paper punch card */
+  content:"";position:absolute;left:0;right:0;bottom:64px;height:1px;
+  background:repeating-linear-gradient(90deg,rgba(27,26,23,.22) 0 5px,transparent 5px 10px);
+}
+.card__top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:20px}
+.card__brand{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.02em}
+.card__n{font-family:var(--mono);font-size:12px;color:var(--terra)}
+
+.dots{display:grid;grid-template-columns:repeat(5,1fr);gap:11px;margin-bottom:20px}
+.dot{
+  aspect-ratio:1;border-radius:50%;border:1.5px dashed rgba(27,26,23,.26);
+  display:grid;place-items:center;transition:all .35s var(--ease-out);
+}
+.dot.on{
+  border-style:solid;border-color:var(--fir);background:var(--fir);
+  animation:stampIn .4s var(--ease-out) backwards;
+  animation-delay:calc(var(--i) * 25ms);
+}
+.dot svg{width:56%;height:56%;stroke:var(--cream);fill:none;stroke-width:1.5;
+  stroke-linecap:round;stroke-linejoin:round}
+@keyframes stampIn{from{transform:scale(1.5) rotate(-12deg);opacity:0}to{transform:none;opacity:1}}
+
+.card__msg{font-family:var(--serif);font-size:19px;line-height:1.3;margin:0;letter-spacing:-.015em}
+.card__free{
+  margin:14px 0 0;padding-top:14px;border-top:1px solid var(--line);
+  font-size:14px;color:var(--ink-60);
+}
+.card__free b{font-family:var(--mono);color:var(--terra);font-size:16px}
+
+.won .card{animation:won .7s var(--ease-out)}
+@keyframes won{0%,100%{transform:none}30%{transform:scale(1.035) rotate(-.6deg)}}
+
+.wrapr .btn{width:100%;margin-top:16px}
+.wrapr .btn--ghost{color:rgba(246,241,231,.5)}
+.wrapr .demo{background:rgba(246,241,231,.08);border-left-color:var(--brass);color:rgba(246,241,231,.66)}
+
+.howto{padding:0 var(--pad) 40px;max-width:520px;margin:0 auto}
+.howto h2{font-size:19px;color:var(--cream);margin-bottom:14px}
+.howto ol{margin:0;padding-left:20px;color:rgba(246,241,231,.68);font-size:14.5px;line-height:1.8}
+.howto li::marker{color:var(--brass);font-family:var(--mono);font-size:12px}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="top__name" href="index.html" aria-label="Off the Tracks, home">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" stroke="#C89B5A" stroke-width="1.3"/>
+      <path d="M3.5 12h17M7 9v6M11 9v6M15 9v6" stroke="#C4633C" stroke-width="1.3" stroke-linecap="round"/>
+    </svg>
+    Off the Tracks
+  </a>
+  <div class="status" id="status" role="status" aria-live="polite">
+    <span class="status__dot"></span><span class="status__txt">Hours</span>
+  </div>
+</header>
+
+<main>
+  <div class="head">
+    <p class="eyebrow">Regulars</p>
+    <h1>Your stamps</h1>
+    <p>Ten coffees, the eleventh is on us. No card to lose, no account to make.</p>
+  </div>
+
+  <div class="wrapr"><div id="rewards"></div></div>
+
+  <section class="howto">
+    <h2>How it works</h2>
+    <ol>
+      <li>Order a coffee.</li>
+      <li>Scan the card at the till — one tap, one stamp.</li>
+      <li>Ten stamps and the next one's free.</li>
+    </ol>
+  </section>
+</main>
+
+<nav class="line" aria-label="Main">
+  <a class="stop" href="index.html"><span class="stop__pin"></span>Home</a>
+  <a class="stop" href="menu.html"><span class="stop__pin"></span>Menu</a>
+  <a class="stop" href="place.html"><span class="stop__pin"></span>Place</a>
+  <a class="stop" href="visit.html"><span class="stop__pin"></span>Visit</a>
+  <a class="stop" href="rewards.html" aria-current="page"><span class="stop__pin"></span>Stamps</a>
+</nav>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="app.js"></script>
+<script src="order.js"></script>
+<script src="rewards.js"></script>
+</body>
+</html>

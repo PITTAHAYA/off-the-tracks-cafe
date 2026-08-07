@@ -14,6 +14,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="app.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preload" as="image" href="assets/IMG_4173.jpg">
 
 <style>
@@ -119,6 +121,42 @@ body{padding-bottom:var(--nav)}
 }
 @media(min-width:760px){ .facts{grid-template-columns:repeat(4,1fr)} }
 
+/* the story, in three lines instead of five paragraphs */
+.story{padding:46px var(--pad) 10px;max-width:640px;margin:0 auto;text-align:center}
+.story h2{font-size:clamp(26px,7vw,34px);margin-bottom:16px}
+.story p{color:var(--ink-60);font-size:16px;line-height:1.7;margin:0 auto 18px;max-width:38ch}
+.story strong{color:var(--ink);font-weight:600}
+.story__q{
+  font-family:var(--serif);font-style:italic;font-size:17px;line-height:1.5;
+  color:var(--ink);margin:24px auto 0;max-width:34ch;
+}
+.story__q cite{
+  display:block;font-style:normal;margin-top:8px;
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-40);
+}
+
+/* what regulars say */
+.says{padding:34px 0 6px;overflow:hidden}
+.says__t{
+  text-align:center;font-family:var(--mono);font-size:9.5px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--ink-40);margin-bottom:20px;
+}
+.says__track{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:0 var(--pad) 6px;scroll-padding-left:var(--pad);scrollbar-width:none;
+}
+.says__track::-webkit-scrollbar{display:none}
+.say{
+  flex:none;width:76vw;max-width:330px;scroll-snap-align:start;
+  background:var(--cream-2);border:1px solid var(--line);border-radius:3px;padding:20px 20px 18px;
+}
+.say__stars{color:var(--brass);font-size:12px;letter-spacing:.22em;margin-bottom:10px}
+.say p{font-family:var(--serif);font-size:16px;line-height:1.45;margin:0 0 12px;letter-spacing:-.01em}
+.say cite{
+  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-40);
+}
+
 .closer{padding:40px var(--pad) 44px;text-align:center;background:var(--cream)}
 .closer p{font-family:var(--serif);font-size:22px;line-height:1.3;letter-spacing:-.02em;margin:0 0 22px}
 .closer .btn{max-width:320px;margin:0 auto}
@@ -189,6 +227,40 @@ body{padding-bottom:var(--nav)}
   <div>Fully licensed —<br>beer, wine, spirits</div>
 </div>
 
+<section class="story">
+  <h2 class="rv">A Granville Island original.</h2>
+  <p class="rv" data-d="1">
+    Beans from a local direct-trade roaster, pulled on a <strong>vintage Synesso</strong>.
+    Bread from <strong>A Bread Affair</strong>. Everything else made here, from scratch,
+    in a very small kitchen.
+  </p>
+  <blockquote class="story__q rv" data-d="2">
+    "One cannot think well, love well, and sleep well, if one has not dined well."
+    <cite>Virginia Woolf</cite>
+  </blockquote>
+</section>
+
+<section class="says">
+  <p class="says__t rv">What regulars say</p>
+  <div class="says__track">
+    <blockquote class="say">
+      <div class="say__stars" aria-label="Five stars">★★★★★</div>
+      <p>The almond croissant is the best I've had on this side of the water.</p>
+      <cite>Google review</cite>
+    </blockquote>
+    <blockquote class="say">
+      <div class="say__stars" aria-label="Five stars">★★★★★</div>
+      <p>Quiet end of the island, real espresso, and nobody rushes you.</p>
+      <cite>Google review</cite>
+    </blockquote>
+    <blockquote class="say">
+      <div class="say__stars" aria-label="Five stars">★★★★★</div>
+      <p>Sat outside with a cappuccino and forgot I had somewhere to be.</p>
+      <cite>Google review</cite>
+    </blockquote>
+  </div>
+</section>
+
 <section class="closer">
   <p class="rv">Enjoy the company.</p>
   <a class="btn btn--fill rv" data-d="1"
@@ -211,6 +283,7 @@ body{padding-bottom:var(--nav)}
   <a class="stop" href="menu.html"><span class="stop__pin"></span>Menu</a>
   <a class="stop" href="place.html"><span class="stop__pin"></span>Place</a>
   <a class="stop" href="visit.html"><span class="stop__pin"></span>Visit</a>
+  <a class="stop" href="rewards.html"><span class="stop__pin"></span>Stamps</a>
 </nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>

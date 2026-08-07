@@ -47,6 +47,43 @@ Two menu items are worth a look before launch: `Baked` names the pastries generi
 `Eats` list is exactly the eight items from tracksbistro.ca. If the kitchen has moved
 on, that list is nine lines to update.
 
+## Against the current site (tracksbistro.ca)
+
+| | tracksbistro.ca | this |
+|---|---|---|
+| Page weight | 6.7 MB, 61 requests | ~0.5 MB first view |
+| Structure | one long scrolling page | five pages, one job each |
+| Menu | 8 item names, no prices | full menu, photos, prices |
+| Order for pickup | — | cart, checkout, pickup times |
+| Book a table | — | live availability grid |
+| Open right now? | you read a sentence | live pill, Vancouver time |
+| Loyalty | — | stamp card, no plastic |
+| Install to home screen | — | yes, works offline |
+| Feedback | 5-field form | two taps |
+| Structured data | — | JSON-LD for Google |
+
+## Installable + offline
+
+`manifest.webmanifest` + `sw.js` make this an installable app: added to the home
+screen it opens full-screen with its own icon, and the menu, hours and photos stay
+readable with no signal — which matters in a timber-and-steel building on Granville
+Island. Chrome and Android get a one-time install invitation; iOS uses Share ▸ Add to
+Home Screen. Requires https, so it's inactive on `file://` and live on Vercel.
+
+Bump `CACHE` in `sw.js` when you want returning visitors to drop their old copy.
+
+## Stamp card
+
+`rewards.html` + `rewards.js`. Ten coffees, the eleventh free, stored in the visitor's
+own browser — no account, no personal data held. **In the demo the button stamps the
+card itself.** In production a stamp must come from the café's side (a rotating QR at
+the till, or a code from the POS) or customers can stamp their own. `stamp()` is the seam.
+
+## Reviews
+
+The three quotes on the home page are illustrative. Replace them with real verbatim
+Google reviews, or delete the `.says` section — don't ship invented attributed quotes.
+
 ## Ordering and booking are SIMULATED
 
 Both flows are complete and interactive, but nothing leaves the browser.

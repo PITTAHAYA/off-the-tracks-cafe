@@ -1,0 +1,22 @@
+{
+  "name": "Off the Tracks — Espresso Bar & Bistro",
+  "short_name": "Off the Tracks",
+  "description": "Espresso, pastry and bistro plates on Railspur Alley, Granville Island. Order for pickup, book a table, collect stamps.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#14243A",
+  "theme_color": "#14243A",
+  "categories": ["food", "lifestyle"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Order for pickup", "url": "menu.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Book a table",     "url": "visit.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] },
+    { "name": "My stamps",        "url": "rewards.html", "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

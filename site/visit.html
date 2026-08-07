@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="app.css">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
 <style>
 /* ── visit only ────────────────────────────────────────── */
@@ -63,6 +65,30 @@ body{background:var(--navy);color:var(--cream)}
   padding:34px 0 40px;
 }
 .rsv > div{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+
+/* feedback — their old site had a form; this one takes two taps */
+.say-hi{padding:34px var(--pad) 0;max-width:var(--maxw);margin:0 auto}
+.say-hi h2{font-size:24px;color:var(--cream);margin:8px 0 18px;letter-spacing:-.02em}
+.say-hi .eyebrow{color:var(--brass)}
+.mood{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.mood__b{
+  min-height:46px;border:1px solid rgba(246,241,231,.26);border-radius:3px;color:var(--cream);
+  font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  transition:all .25s var(--ease);
+}
+.mood__b[aria-checked="true"]{background:var(--terra);border-color:var(--terra)}
+.say-hi .fld span{color:rgba(246,241,231,.5)}
+.say-hi textarea{
+  width:100%;padding:12px 14px;font:inherit;font-size:16px;line-height:1.5;resize:vertical;
+  background:rgba(246,241,231,.07);border:1px solid rgba(246,241,231,.2);
+  border-radius:3px;color:var(--cream);
+}
+.say-hi textarea:focus{outline:2px solid var(--terra);outline-offset:1px}
+.say-hi .btn{width:100%;margin-top:16px}
+.say-hi__note{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  color:rgba(246,241,231,.4);margin:12px 0 0;line-height:1.6;
+}
 
 .reach{
   padding:30px var(--pad) 0;max-width:var(--maxw);margin:0 auto;
@@ -141,6 +167,20 @@ body{background:var(--navy);color:var(--cream)}
   <!-- booking: rendered by reserve.js, slots derived from the hours above -->
   <section class="rsv"><div id="reserve"></div></section>
 
+  <section class="say-hi">
+    <p class="eyebrow">Tell us</p>
+    <h2>Good or bad, we want to hear it.</h2>
+    <div class="mood" role="radiogroup" aria-label="How was it">
+      <button class="mood__b" role="radio" aria-checked="false" data-mood="Loved it">Loved it</button>
+      <button class="mood__b" role="radio" aria-checked="false" data-mood="Good">Good</button>
+      <button class="mood__b" role="radio" aria-checked="false" data-mood="Not great">Not great</button>
+    </div>
+    <label class="fld"><span>Your note</span>
+      <textarea id="fbText" rows="3" placeholder="What worked, what didn't"></textarea></label>
+    <button class="btn btn--fill" id="fbSend">Send to the team</button>
+    <p class="say-hi__note">Opens your mail app — nothing is stored here, and nothing is shared.</p>
+  </section>
+
   <div class="reach">
     <a href="mailto:info@tracksbistro.ca">info@tracksbistro.ca</a>
     <a href="https://www.instagram.com/offthetracksbistro/" target="_blank" rel="noopener">Instagram</a>
@@ -158,6 +198,7 @@ body{background:var(--navy);color:var(--cream)}
   <a class="stop" href="menu.html"><span class="stop__pin"></span>Menu</a>
   <a class="stop" href="place.html"><span class="stop__pin"></span>Place</a>
   <a class="stop" href="visit.html" aria-current="page"><span class="stop__pin"></span>Visit</a>
+  <a class="stop" href="rewards.html"><span class="stop__pin"></span>Stamps</a>
 </nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
