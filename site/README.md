@@ -1,21 +1,31 @@
 # Off the Tracks — Café & Bistro
 
-Four short pages for the Google Maps listing. No build step, no dependencies.
-Drop the `site/` folder on any host.
+Five short pages for the Google Maps listing — installable, works offline,
+takes pickup orders and table bookings. No build step, no dependencies, no
+framework. Drop the `site/` folder on any static host.
 
 ```
 site/
-  index.html   Home    — one photo, the name, three doors
-  menu.html    Menu    — three tabs: Eats, Baked, Drinks
-  place.html   Place   — eighteen photos, a lightbox
-  visit.html   Visit   — map, address, hours, call, socials
-  app.css      shared styles
-  app.js       shared behaviour + ALL editable content
-  assets/      27 photos, resized to 1600px (11 MB)
+  index.html    Home     — hero, three doors, story, reviews
+  menu.html     Menu     — Eats, Baked, Drinks, add to order
+  place.html    Place    — eighteen photos, a lightbox
+  visit.html    Visit    — map, hours, booking, feedback
+  rewards.html  Stamps   — ten-coffee loyalty card
+
+  app.css       shared styles
+  app.js        shared behaviour + ALL editable content
+  order.js      cart, checkout, pickup slots
+  reserve.js    table booking
+  rewards.js    stamp card
+  sw.js         offline cache
+  manifest.webmanifest
+  icons/        app icons
+  assets/       original JPEGs (fallback + social scrapers)
+  assets/w/     WebP actually served, two sizes each
 ```
 
-Each page does one job. Nothing has a paragraph — the home page is about
-25 words total, and the pictures carry the rest.
+Each page does one job. Nothing has a paragraph over three lines — the
+pictures carry the rest.
 
 ## Content
 
@@ -114,13 +124,13 @@ provider (OpenTable, Tock, Resy), then set both `DEMO_MODE` flags to `false`.
 
 ## What's built in
 
-- **The line.** The bottom nav is a rail with four stops; the current page is the
+- **The line.** The bottom nav is a rail with five stops; the current page is the
   filled one. It's the "Off the Tracks" idea used as navigation rather than
   decoration, and it keeps every page one tap from every other page.
 - **Live open/closed**, computed in `America/Vancouver` — right for someone
   checking from another timezone. Warns at the 60-minute mark, refreshes each minute.
-- **Menu.** Drinks are name–leader–price rows. Food is photo cards with the price
-  and dietary chips, no descriptions. Six tabs, no page reloads.
+- **Menu.** Drinks and eats are name–leader–price rows; baked goods are photo cards
+  with dietary chips. Three tabs, no page reloads, `+` to add to an order.
 - **Place.** CSS masonry, lightbox with swipe (sideways to page, down to dismiss),
   arrow keys and Escape on desktop.
 - **Visit.** Map, Directions, Copy address with toast, native Share sheet.
@@ -135,7 +145,10 @@ provider (OpenTable, Tock, Resy), then set both `DEMO_MODE` flags to `false`.
 - Colours come from the room: Railspur navy (signage, umbrellas, the blue cups),
   terracotta (the banners and patio chairs), fir green (the siding), brass, paper
   cream. Body text meets WCAG AA on its background.
-- `assets/` holds resized copies. Originals are untouched in the parent folder.
-  Converting them to WebP or AVIF before deploying would cut the payload roughly
-  in half.
-- If you edit `app.css` and don't see the change, hard-refresh — browsers cache it.
+- Photos are served from `assets/w/` as WebP at two sizes — full (≤1400px) for the
+  hero and lightbox, `-sm` (≤700px) for cards, doors and gallery thumbs. 10.6 MB of
+  JPEG became 4.1 MB. `assets/` keeps the JPEGs for `og:image`, since some social
+  scrapers still can't decode WebP. To regenerate after adding photos, re-run the
+  Pillow snippet in the git history for commit `8ffa1a0`.
+- If you edit `app.css` and don't see the change, hard-refresh — and if the site is
+  installed, the service worker holds a copy too: bump `CACHE` in `sw.js`.
