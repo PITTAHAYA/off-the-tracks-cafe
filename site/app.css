@@ -1,0 +1,158 @@
+/* ═══════════════════════════════════════════════════════════
+   OFF THE TRACKS — shared stylesheet
+   Four pages, one job each. Palette taken from the room:
+   Railspur navy (signage, umbrellas, the blue cups), terracotta
+   (banners, patio chairs), fir green (siding), brass, paper cream.
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --navy:#14243A;  --terra:#C4633C;  --brass:#C89B5A;  --fir:#22402E;
+  --cream:#F6F1E7; --cream-2:#EFE7D9;
+  --ink:#1B1A17;   --ink-60:#57534A; --ink-40:#8C8579;
+  --line:rgba(27,26,23,.14);
+
+  --serif:'Fraunces',ui-serif,Georgia,serif;
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+
+  --pad:22px;
+  --maxw:1100px;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --nav:calc(66px + env(safe-area-inset-bottom,0px));
+  --top:calc(52px + env(safe-area-inset-top,0px));
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--cream);color:var(--ink);
+  font-family:var(--sans);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  padding-bottom:var(--nav);
+}
+img{max-width:100%;display:block}
+[hidden]{display:none!important}   /* .btn's display:flex would otherwise win */
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--terra);outline-offset:3px}
+
+/* paper grain */
+body::after{
+  content:"";position:fixed;inset:0;z-index:9998;pointer-events:none;
+  opacity:.035;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* native cross-document transitions where supported */
+@view-transition{navigation:auto}
+
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.08;margin:0;letter-spacing:-.025em}
+h2{font-size:clamp(28px,8vw,42px)}
+p{margin:0 0 .9em}
+.wrap{width:100%;max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+.eyebrow{
+  font-family:var(--mono);font-size:10.5px;font-weight:500;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--terra);
+}
+
+/* ═══ TOP BAR ═══════════════════════════════════════════ */
+.top{
+  position:sticky;top:0;z-index:50;height:var(--top);
+  padding:env(safe-area-inset-top,0px) var(--pad) 0;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  background:rgba(246,241,231,.92);border-bottom:1px solid var(--line);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+.top--dark{background:rgba(20,36,58,.6);border-bottom-color:rgba(246,241,231,.14)}
+.top__name{
+  font-family:var(--serif);font-size:16px;font-weight:600;letter-spacing:-.02em;
+  display:flex;align-items:center;gap:9px;
+}
+.top__name svg{width:20px;height:20px;flex:none}
+.top--dark .top__name{color:var(--cream)}
+
+.status{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;
+  padding:5px 11px;border-radius:100px;white-space:nowrap;
+  border:1px solid var(--line);color:var(--ink-60);
+}
+.status__dot{width:6px;height:6px;border-radius:50%;background:#3E9B5C;flex:none}
+.status__dot.shut{background:var(--terra)}
+.top--dark .status{border-color:rgba(246,241,231,.28);color:rgba(246,241,231,.85);
+  background:rgba(15,26,42,.35)}
+.top--dark .status__dot{background:#79C08C}
+
+/* ═══ BOTTOM NAV — the line, with four stops ════════════ */
+.line{
+  position:fixed;left:0;right:0;bottom:0;z-index:80;height:var(--nav);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  background:rgba(246,241,231,.95);border-top:1px solid var(--line);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  display:flex;
+}
+.line::before{                       /* the rail itself */
+  content:"";position:absolute;left:0;right:0;top:22px;height:1px;
+  background:repeating-linear-gradient(90deg,rgba(27,26,23,.2) 0 6px,transparent 6px 12px);
+}
+.stop{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:9px;padding-top:16px;position:relative;min-height:56px;
+  font-family:var(--mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-40);transition:color .3s var(--ease);
+}
+.stop__pin{
+  width:11px;height:11px;border-radius:50%;background:var(--cream);
+  border:1.5px solid rgba(27,26,23,.28);position:relative;z-index:1;
+  transition:all .35s var(--ease-out);
+}
+.stop[aria-current="page"]{color:var(--ink)}
+.stop[aria-current="page"] .stop__pin{
+  background:var(--terra);border-color:var(--terra);transform:scale(1.25);
+  box-shadow:0 0 0 4px rgba(196,99,60,.16);
+}
+.stop:active .stop__pin{transform:scale(.9)}
+
+/* ═══ reveal ════════════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv[data-d="1"]{transition-delay:.07s}.rv[data-d="2"]{transition-delay:.14s}
+.rv[data-d="3"]{transition-delay:.21s}.rv[data-d="4"]{transition-delay:.28s}
+
+/* ═══ buttons ═══════════════════════════════════════════ */
+.btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;min-height:52px;
+  border-radius:3px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;
+  text-transform:uppercase;transition:transform .2s var(--ease);
+}
+.btn:active{transform:scale(.98)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;flex:none}
+.btn--fill{background:var(--terra);color:#fff}
+.btn--out{border:1px solid var(--line);color:var(--ink)}
+.on-navy .btn--out{border-color:rgba(246,241,231,.3);color:var(--cream)}
+
+/* ═══ toast ═════════════════════════════════════════════ */
+.toast{
+  position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:300;
+  transform:translate(-50%,-16px);opacity:0;pointer-events:none;
+  background:var(--navy);color:var(--cream);padding:10px 18px;border-radius:100px;
+  font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  transition:opacity .3s var(--ease),transform .35s var(--ease-out);white-space:nowrap;
+  box-shadow:0 4px 20px rgba(15,26,42,.25);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ═══ shared: photo tiles ═══════════════════════════════ */
+.fade{opacity:0;transform:scale(1.02);transition:opacity .6s var(--ease),transform .8s var(--ease)}
+.fade.ok{opacity:1;transform:none}
+
+@media(min-width:760px){
+  :root{--pad:40px}
+  .line{justify-content:center;gap:20px}
+  .stop{flex:0 0 130px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .rv{opacity:1;transform:none}
+  @view-transition{navigation:none}
+}

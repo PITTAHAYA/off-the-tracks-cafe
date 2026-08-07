@@ -1,0 +1,312 @@
+/* ═══════════════════════════════════════════════════════════
+   OFF THE TRACKS — shared behaviour + all editable content.
+   One file, loaded by every page. Each block runs only if the
+   page it belongs to is the one being shown.
+   ═══════════════════════════════════════════════════════════ */
+(function(){
+"use strict";
+const $  = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+const A  = "assets/";
+
+/* ═══════════ EDIT HERE ═══════════ */
+
+const PHONE   = "+16046898700";          // displayed as (604) 689-8700
+const EMAIL   = "info@tracksbistro.ca";
+const ADDRESS = "1363 Railspur Alley, Vancouver, BC V6H 4G9";
+const SOCIAL  = {
+  instagram:"https://www.instagram.com/offthetracksbistro/",
+  facebook: "https://www.facebook.com/tracksbistro"
+};
+
+const HOURS = [         // index 0 = Sunday … 6 = Saturday, 24h clock
+  {day:"Sunday",    open:9, close:17},
+  {day:"Monday",    open:9, close:16},
+  {day:"Tuesday",   open:9, close:16},
+  {day:"Wednesday", open:9, close:16},
+  {day:"Thursday",  open:9, close:16},
+  {day:"Friday",    open:9, close:16},
+  {day:"Saturday",  open:9, close:17}
+];
+
+/* Menu — the items are the ones Off the Tracks publishes on tracksbistro.ca.
+   No prices, because they don't publish any: a wrong price on a Maps listing
+   is worse than none. Add `p:"14.50"` to any item and the price renders.
+   Each tab opens with one photo, then a clean list — fewest words possible. */
+const MENU = [
+  { id:"eats", label:"Eats", style:"rows",
+    hero:{img:"IMG_4184.jpg", cap:"Avocado toast"},
+    foot:"Sandwiches on certified organic bread from A Bread Affair.",
+    items:[
+      {n:"Avocado Toast"},
+      {n:"Egg Sandwich",     note:"bacon or avocado"},
+      {n:"Breakfast Burrito"},
+      {n:"Grilled Cheese"},
+      {n:"Tomato Pesto"},
+      {n:"Chicken Club"},
+      {n:"Chicken Fig"},
+      {n:"Beet-L-T"},
+      {n:"Sides",            note:"fries, soup or salad"}
+  ]},
+
+  { id:"baked", label:"Baked", style:"cards",
+    foot:"Baked fresh every morning. Come early to see what's in.",
+    items:[
+      {n:"Croissant",         img:"IMG_4190.jpg", diet:["V"]},
+      {n:"Pain au Chocolat",  img:"IMG_4191.jpg", diet:["V"]},
+      {n:"Cruffin",           img:"IMG_4185.jpg", diet:["V"]},
+      {n:"Loaf Cake",         img:"IMG_4188.jpg", diet:["V"]},
+      {n:"Macarons",          img:"IMG_4183.jpg", diet:["GF"]},
+      {n:"Tarts",             img:"IMG_4194.jpg", diet:["V"]},
+      {n:"Cakes",             img:"IMG_4234.jpg", diet:["V"]},
+      {n:"Pies",              img:"IMG_4193.jpg", diet:["V"]}
+  ]},
+
+  { id:"drinks", label:"Drinks", style:"rows",
+    hero:{img:"IMG_4174.jpg", cap:"Cappuccino, on the terrace"},
+    foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
+    items:[
+      {n:"Espresso"},
+      {n:"Americano"},
+      {n:"Cortado"},
+      {n:"Flat White"},
+      {n:"Cappuccino"},
+      {n:"Latte"},
+      {n:"Mocha"},
+      {n:"Tea"},
+      {n:"Craft Beer",  note:"local, rotating"},
+      {n:"Wine"},
+      {n:"Spirits"}
+  ]}
+];
+
+const GALLERY = [
+  {img:"IMG_4173.jpg", alt:"Railspur Alley in the sun, the café's timber frame and navy umbrella, Granville Street Bridge behind."},
+  {img:"IMG_4174.jpg", alt:"A cappuccino in a blue cup held up in front of the patio planters."},
+  {img:"IMG_4195.jpg", alt:"The café floor from the mezzanine: timber trusses, espresso bar, guests at wooden tables."},
+  {img:"IMG_4172.jpg", alt:"The entrance under the Café · Bistro sign, hanging plants and flower boxes."},
+  {img:"IMG_4183.jpg", alt:"Lemonade with an orange wheel beside three macarons on the patio."},
+  {img:"IMG_4175.jpg", alt:"The bar and chalkboard menus, with the long communal table in the foreground."},
+  {img:"IMG_4177.jpg", alt:"A rosetta poured into a white cup, seen from directly above."},
+  {img:"IMG_4176.jpg", alt:"The row of Railspur Alley studios in autumn colour."},
+  {img:"IMG_4185.jpg", alt:"Three pistachio cruffins on a wooden board among garden flowers."},
+  {img:"IMG_4192.jpg", alt:"Raspberry cupcakes carried out on a board into the alley."},
+  {img:"IMG_4238.jpg", alt:"Two breakfasts and coffees on a patio table beside the planters."},
+  {img:"IMG_4196.jpg", alt:"A full tray of croissants, cruffins and danishes fresh from the oven."},
+  {img:"IMG_4180.jpg", alt:"A chicken sandwich on a soft bun with an arugula salad alongside."},
+  {img:"IMG_4189.jpg", alt:"Avocado toast with a soft egg breaking over it."},
+  {img:"IMG_4235.jpg", alt:"Three soft tacos on a long plate beside a glass of beer."},
+  {img:"IMG_4236.jpg", alt:"A bowl of greens with seared tofu, chickpeas, egg and tomato."},
+  {img:"IMG_4179.jpg", alt:"A waffle with berries, blueberry compote and cream."},
+  {img:"IMG_4182.jpg", alt:"A granola bowl and a smoked salmon bagel with a latte."}
+];
+
+/* ═══════════ open / closed, in Vancouver time ═══════════ */
+function vanNow(){
+  const p = new Intl.DateTimeFormat("en-CA",{timeZone:"America/Vancouver",
+    weekday:"short",hour:"2-digit",minute:"2-digit",hour12:false}).formatToParts(new Date());
+  const g = t => p.find(x=>x.type===t).value;
+  return {day:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(g("weekday")),
+          mins:parseInt(g("hour"),10)*60 + parseInt(g("minute"),10)};
+}
+const fmt = h => (h%12===0?12:h%12) + (h>=12?"pm":"am");
+
+function paintStatus(){
+  const el = $("#status"); if(!el) return;
+  const now = vanNow(), t = HOURS[now.day];
+  const live = now.mins >= t.open*60 && now.mins < t.close*60;
+  const soon = live && (t.close*60 - now.mins) <= 60;
+  const dot = $(".status__dot", el), txt = $(".status__txt", el);
+  dot.classList.toggle("shut", !live || soon);
+  if(soon)      txt.textContent = "Closing " + fmt(t.close);
+  else if(live) txt.textContent = "Open till " + fmt(t.close);
+  else {
+    const next = now.mins < t.open*60 ? t : HOURS[(now.day+1)%7];
+    txt.textContent = "Opens " + fmt(next.open);
+  }
+}
+paintStatus(); setInterval(paintStatus, 60000);
+
+/* ═══════════ hours table (visit page) ═══════════ */
+(function(){
+  const box = $("#hours"); if(!box) return;
+  const today = vanNow().day;
+  box.innerHTML = [1,2,3,4,5,6,0].map(i=>{
+    const h = HOURS[i];
+    return `<div class="hrow${i===today?" hrow--now":""}">
+      <span class="hrow__d">${h.day}</span>
+      <span class="hrow__t">${fmt(h.open)} — ${fmt(h.close)}</span></div>`;
+  }).join("");
+})();
+
+/* ═══════════ image fade-in ═══════════ */
+function fadeIn(root=document){
+  $$("img.fade", root).forEach(img=>{
+    const on = ()=>img.classList.add("ok");
+    img.complete ? on() : img.addEventListener("load", on, {once:true});
+    img.addEventListener("error", ()=>{
+      const host = img.closest(".mcard, .tile, .gitem");
+      if(host) host.style.display = "none";
+    }, {once:true});
+  });
+}
+fadeIn();
+
+/* ═══════════ scroll reveal ═══════════ */
+const io = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+},{rootMargin:"0px 0px -10% 0px",threshold:.05});
+$$(".rv").forEach(el=>io.observe(el));
+
+/* ═══════════ menu page ═══════════ */
+(function(){
+  const tabs = $("#tabs"), panel = $("#panel");
+  if(!tabs || !panel) return;
+
+  const price = it => it.p ? `<span class="price">$${it.p}</span>` : ``;
+
+  const card = it => `<article class="mcard">
+      <div class="mcard__ph">
+        <img class="fade" loading="lazy" src="${A+it.img}" alt="${it.n}">
+        ${it.tag ? `<span class="mcard__tag">${it.tag}</span>` : ``}
+      </div>
+      <div class="mcard__in">
+        <h3>${it.n}</h3>
+        <div class="mcard__foot">
+          ${price(it)}
+          ${it.diet ? it.diet.map(c=>`<span class="chip">${c}</span>`).join("") : ``}
+        </div>
+      </div>
+    </article>`;
+
+  const row = it => `<div class="mrow">
+      <span class="mrow__n">${it.n}${it.note ? `<i>${it.note}</i>` : ``}</span>
+      ${it.p ? `<span class="mrow__dot"></span>${price(it)}` : ``}
+    </div>`;
+
+  function render(id){
+    const c = MENU.find(m=>m.id===id);
+    const hero = c.hero
+      ? `<figure class="mhero">
+           <img class="fade" loading="lazy" src="${A+c.hero.img}" alt="${c.hero.cap}">
+           <figcaption>${c.hero.cap}</figcaption>
+         </figure>` : ``;
+    const foot = c.foot ? `<p class="mfoot">${c.foot}</p>` : ``;
+    const body = c.style === "cards"
+      ? `<div class="mgrid">${c.items.map(card).join("")}</div>`
+      : `<div class="mrows">${c.items.map(row).join("")}</div>`;
+    panel.innerHTML = hero + body + foot;
+    fadeIn(panel);
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    $$(".mcard, .mrow", panel).forEach((el,i)=>{
+      el.style.opacity = 0; el.style.transform = "translateY(12px)";
+      setTimeout(()=>{
+        el.style.transition = "opacity .45s var(--ease), transform .45s var(--ease)";
+        el.style.opacity = 1; el.style.transform = "none";
+      }, 30 + i*40);
+    });
+  }
+
+  tabs.innerHTML = MENU.map((m,i)=>
+    `<button class="tab" role="tab" data-id="${m.id}" aria-selected="${i===0}">${m.label}</button>`).join("");
+  tabs.addEventListener("click", e=>{
+    const b = e.target.closest(".tab"); if(!b) return;
+    $$(".tab", tabs).forEach(t=>t.setAttribute("aria-selected", t===b));
+    b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});
+    render(b.dataset.id);
+  });
+  render(MENU[0].id);
+})();
+
+/* ═══════════ gallery + lightbox (place page) ═══════════ */
+(function(){
+  const grid = $("#gal"); if(!grid) return;
+  grid.innerHTML = GALLERY.map((g,i)=>
+    `<button class="gitem" data-i="${i}" aria-label="Open photo ${i+1} of ${GALLERY.length}">
+       <img class="fade" loading="lazy" src="${A+g.img}" alt="${g.alt}"></button>`).join("");
+  fadeIn(grid);
+
+  const lb = $("#lb"), img = $("#lbImg"), count = $("#lbCount");
+  let i = 0;
+  function open(n){
+    i = (n + GALLERY.length) % GALLERY.length;
+    img.src = A + GALLERY[i].img; img.alt = GALLERY[i].alt;
+    count.textContent = (i+1) + " / " + GALLERY.length;
+    lb.classList.add("open");
+    requestAnimationFrame(()=>lb.classList.add("show"));
+    document.body.style.overflow = "hidden";
+    $("#lbX").focus();
+  }
+  function close(){
+    lb.classList.remove("show");
+    setTimeout(()=>{ lb.classList.remove("open"); document.body.style.overflow=""; },280);
+  }
+  grid.addEventListener("click", e=>{
+    const b = e.target.closest("[data-i]"); if(b) open(+b.dataset.i);
+  });
+  $("#lbX").onclick = close;
+  $("#lbNext").onclick = ()=>open(i+1);
+  $("#lbPrev").onclick = ()=>open(i-1);
+  lb.addEventListener("click", e=>{ if(e.target === lb) close(); });
+  addEventListener("keydown", e=>{
+    if(!lb.classList.contains("open")) return;
+    if(e.key === "Escape") close();
+    if(e.key === "ArrowRight") open(i+1);
+    if(e.key === "ArrowLeft")  open(i-1);
+  });
+  let sx=0, sy=0;
+  lb.addEventListener("touchstart", e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+  lb.addEventListener("touchend", e=>{
+    const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if(Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) open(i + (dx<0?1:-1));
+    else if(dy > 90) close();
+  },{passive:true});
+})();
+
+/* ═══════════ copy / share / call ═══════════ */
+let tT;
+function toast(msg){
+  const t = $("#toast"); if(!t) return;
+  t.textContent = msg; t.classList.add("on");
+  clearTimeout(tT); tT = setTimeout(()=>t.classList.remove("on"), 2000);
+}
+const copyBtn = $("#copyBtn");
+if(copyBtn) copyBtn.onclick = async ()=>{
+  try{ await navigator.clipboard.writeText(ADDRESS); }
+  catch(_){
+    const ta = document.createElement("textarea");
+    ta.value = ADDRESS; ta.style.position="fixed"; ta.style.opacity=0;
+    document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
+  }
+  toast("Address copied");
+};
+const shareBtn = $("#shareBtn");
+if(shareBtn) shareBtn.onclick = async ()=>{
+  const d = {title:"Off the Tracks", text:"Railspur Alley, Granville Island", url:location.href};
+  if(navigator.share){ try{ await navigator.share(d); }catch(_){} }
+  else { try{ await navigator.clipboard.writeText(location.href); toast("Link copied"); }catch(_){} }
+};
+/* Call buttons and the printed number stay hidden until PHONE is set */
+if(PHONE){
+  $$("[data-call]").forEach(el=>{ el.href = "tel:"+PHONE; el.hidden = false; });
+  const pretty = PHONE.replace(/^\+1(\d{3})(\d{3})(\d{4})$/, "($1) $2-$3");
+  $$("[data-phone-text]").forEach(el=>{
+    el.textContent = pretty; el.href = "tel:"+PHONE; el.hidden = false;
+  });
+}
+
+/* ═══════════ hero parallax (home only) ═══════════ */
+(function(){
+  const media = $("#heroMedia"); if(!media) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  let t = false;
+  addEventListener("scroll", ()=>{
+    if(t) return; t = true;
+    requestAnimationFrame(()=>{
+      t = false;
+      const y = scrollY;
+      if(y < innerHeight * 1.2) media.style.transform = `translate3d(0,${y*.3}px,0)`;
+    });
+  },{passive:true});
+})();
+})();
