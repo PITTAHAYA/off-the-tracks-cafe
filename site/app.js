@@ -118,6 +118,11 @@ function vanNow(){
           mins:parseInt(g("hour"),10)*60 + parseInt(g("minute"),10)};
 }
 const fmt = h => (h%12===0?12:h%12) + (h>=12?"pm":"am");
+/* minutes-since-midnight → "9:15am", for pickup and booking times */
+function clock(mins){
+  const h = Math.floor(mins/60), m = mins % 60;
+  return (h%12===0?12:h%12) + (m ? ":" + String(m).padStart(2,"0") : "") + (h>=12?"pm":"am");
+}
 
 function paintStatus(){
   const el = $("#status"); if(!el) return;
@@ -173,6 +178,12 @@ $$(".rv").forEach(el=>io.observe(el));
 
   const has   = it => SHOW_PRICES && !!it.p;
   const price = it => has(it) ? `<span class="price">$${it.p}</span>` : ``;
+  const slug  = n => n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  /* Orderable only when it has a price — you can't add a "market price" item */
+  const addBtn = it => has(it)
+    ? `<button class="add" data-add="${slug(it.n)}" data-name="${it.n}" data-price="${it.p}"
+               aria-label="Add ${it.n} to your order">+</button>`
+    : ``;
 
   const card = it => `<article class="mcard">
       <div class="mcard__ph">
@@ -184,6 +195,7 @@ $$(".rv").forEach(el=>io.observe(el));
         <div class="mcard__foot">
           ${price(it)}
           ${it.diet ? it.diet.map(c=>`<span class="chip">${c}</span>`).join("") : ``}
+          ${addBtn(it)}
         </div>
       </div>
     </article>`;
@@ -191,6 +203,7 @@ $$(".rv").forEach(el=>io.observe(el));
   const row = it => `<div class="mrow">
       <span class="mrow__n">${it.n}${it.note ? `<i>${it.note}</i>` : ``}</span>
       ${has(it) ? `<span class="mrow__dot"></span>${price(it)}` : ``}
+      ${addBtn(it)}
     </div>`;
 
   function render(id){
@@ -206,6 +219,7 @@ $$(".rv").forEach(el=>io.observe(el));
       : `<div class="mrows">${c.items.map(row).join("")}</div>`;
     panel.innerHTML = hero + body + foot;
     fadeIn(panel);
+    if(window.OTT_ORDER) window.OTT_ORDER.bind(panel);
     if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     $$(".mcard, .mrow", panel).forEach((el,i)=>{
       el.style.opacity = 0; el.style.transform = "translateY(12px)";
@@ -303,6 +317,11 @@ if(PHONE){
     el.textContent = pretty; el.href = "tel:"+PHONE; el.hidden = false;
   });
 }
+
+/* ═══════════ shared API for order.js and reserve.js ═══════════
+   Keeps hours, time formatting and the toast in one place so the
+   ordering and booking flows can never drift from the real hours. */
+window.OTT = { HOURS, MENU, PHONE, EMAIL, ADDRESS, SOCIAL, vanNow, fmt, clock, toast };
 
 /* ═══════════ hero parallax (home only) ═══════════ */
 (function(){

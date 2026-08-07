@@ -56,6 +56,14 @@ body{background:var(--navy);color:var(--cream)}
 .hrow--now::before{content:"";position:absolute;left:-12px;top:50%;width:4px;height:4px;
   margin-top:-2px;border-radius:50%;background:var(--terra)}
 
+/* the booking panel sits as a light inset in the navy page —
+   it's the one place on Visit you act rather than read */
+.rsv{
+  background:var(--cream);color:var(--ink);margin:38px 0 0;
+  padding:34px 0 40px;
+}
+.rsv > div{max-width:var(--maxw);margin:0 auto;padding:0 var(--pad)}
+
 .reach{
   padding:30px var(--pad) 0;max-width:var(--maxw);margin:0 auto;
   display:flex;flex-wrap:wrap;gap:10px 26px;
@@ -130,6 +138,9 @@ body{background:var(--navy);color:var(--cream)}
 
   <div class="hours" id="hours"></div>
 
+  <!-- booking: rendered by reserve.js, slots derived from the hours above -->
+  <section class="rsv"><div id="reserve"></div></section>
+
   <div class="reach">
     <a href="mailto:info@tracksbistro.ca">info@tracksbistro.ca</a>
     <a href="https://www.instagram.com/offthetracksbistro/" target="_blank" rel="noopener">Instagram</a>
@@ -151,5 +162,7 @@ body{background:var(--navy);color:var(--cream)}
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="app.js"></script>
+<script src="order.js"></script>
+<script src="reserve.js"></script>
 </body>
 </html>
