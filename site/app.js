@@ -29,54 +29,62 @@ const HOURS = [         // index 0 = Sunday … 6 = Saturday, 24h clock
   {day:"Saturday",  open:9, close:17}
 ];
 
-/* Menu — the items are the ones Off the Tracks publishes on tracksbistro.ca.
-   No prices, because they don't publish any: a wrong price on a Maps listing
-   is worse than none. Add `p:"14.50"` to any item and the price renders.
-   Each tab opens with one photo, then a clean list — fewest words possible. */
+/* ── PRICES ──────────────────────────────────────────────────────────
+   The items below are the real ones Off the Tracks publishes on
+   tracksbistro.ca. The PRICES ARE INDICATIVE — the café publishes none,
+   so these are market rates for Granville Island, set here to show the
+   client what a finished menu looks like.
+
+   Flip SHOW_PRICES to false and every price disappears site-wide, in one
+   edit, leaving the honest version. Do that before the real launch unless
+   the café has confirmed each number.
+   ─────────────────────────────────────────────────────────────────── */
+const SHOW_PRICES = true;
+
 const MENU = [
   { id:"eats", label:"Eats", style:"rows",
     hero:{img:"IMG_4184.jpg", cap:"Avocado toast"},
     foot:"Sandwiches on certified organic bread from A Bread Affair.",
     items:[
-      {n:"Avocado Toast"},
-      {n:"Egg Sandwich",     note:"bacon or avocado"},
-      {n:"Breakfast Burrito"},
-      {n:"Grilled Cheese"},
-      {n:"Tomato Pesto"},
-      {n:"Chicken Club"},
-      {n:"Chicken Fig"},
-      {n:"Beet-L-T"},
-      {n:"Sides",            note:"fries, soup or salad"}
+      {n:"Avocado Toast",     p:"16.50"},
+      {n:"Egg Sandwich",      p:"14.00", note:"bacon or avocado"},
+      {n:"Breakfast Burrito", p:"16.00"},
+      {n:"Grilled Cheese",    p:"14.50"},
+      {n:"Tomato Pesto",      p:"14.50"},
+      {n:"Chicken Club",      p:"18.50"},
+      {n:"Chicken Fig",       p:"18.50"},
+      {n:"Beet-L-T",          p:"16.00"},
+      {n:"Sides",             p:"6.50",  note:"fries, soup or salad"}
   ]},
 
   { id:"baked", label:"Baked", style:"cards",
     foot:"Baked fresh every morning. Come early to see what's in.",
     items:[
-      {n:"Croissant",         img:"IMG_4190.jpg", diet:["V"]},
-      {n:"Pain au Chocolat",  img:"IMG_4191.jpg", diet:["V"]},
-      {n:"Cruffin",           img:"IMG_4185.jpg", diet:["V"]},
-      {n:"Loaf Cake",         img:"IMG_4188.jpg", diet:["V"]},
-      {n:"Macarons",          img:"IMG_4183.jpg", diet:["GF"]},
-      {n:"Tarts",             img:"IMG_4194.jpg", diet:["V"]},
-      {n:"Cakes",             img:"IMG_4234.jpg", diet:["V"]},
-      {n:"Pies",              img:"IMG_4193.jpg", diet:["V"]}
+      {n:"Croissant",         p:"4.75", img:"IMG_4190.jpg", diet:["V"]},
+      {n:"Pain au Chocolat",  p:"5.25", img:"IMG_4191.jpg", diet:["V"]},
+      {n:"Cruffin",           p:"6.25", img:"IMG_4185.jpg", tag:"Favourite", diet:["V"]},
+      {n:"Loaf Cake",         p:"5.00", img:"IMG_4188.jpg", diet:["V"]},
+      {n:"Macarons",          p:"3.00", img:"IMG_4183.jpg", diet:["GF"]},
+      {n:"Tarts",             p:"7.00", img:"IMG_4194.jpg", diet:["V"]},
+      {n:"Cakes",             p:"6.75", img:"IMG_4234.jpg", diet:["V"]},
+      {n:"Pies",              p:"7.25", img:"IMG_4193.jpg", diet:["V"]}
   ]},
 
   { id:"drinks", label:"Drinks", style:"rows",
     hero:{img:"IMG_4174.jpg", cap:"Cappuccino, on the terrace"},
     foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
     items:[
-      {n:"Espresso"},
-      {n:"Americano"},
-      {n:"Cortado"},
-      {n:"Flat White"},
-      {n:"Cappuccino"},
-      {n:"Latte"},
-      {n:"Mocha"},
-      {n:"Tea"},
-      {n:"Craft Beer",  note:"local, rotating"},
-      {n:"Wine"},
-      {n:"Spirits"}
+      {n:"Espresso",   p:"3.50"},
+      {n:"Americano",  p:"4.00"},
+      {n:"Cortado",    p:"4.50"},
+      {n:"Flat White", p:"5.00"},
+      {n:"Cappuccino", p:"5.00"},
+      {n:"Latte",      p:"5.25"},
+      {n:"Mocha",      p:"5.75"},
+      {n:"Tea",        p:"4.00"},
+      {n:"Craft Beer", p:"8.50", note:"local, rotating"},
+      {n:"Wine",       p:"11.00"},
+      {n:"Spirits",    p:"10.00"}
   ]}
 ];
 
@@ -163,7 +171,8 @@ $$(".rv").forEach(el=>io.observe(el));
   const tabs = $("#tabs"), panel = $("#panel");
   if(!tabs || !panel) return;
 
-  const price = it => it.p ? `<span class="price">$${it.p}</span>` : ``;
+  const has   = it => SHOW_PRICES && !!it.p;
+  const price = it => has(it) ? `<span class="price">$${it.p}</span>` : ``;
 
   const card = it => `<article class="mcard">
       <div class="mcard__ph">
@@ -181,7 +190,7 @@ $$(".rv").forEach(el=>io.observe(el));
 
   const row = it => `<div class="mrow">
       <span class="mrow__n">${it.n}${it.note ? `<i>${it.note}</i>` : ``}</span>
-      ${it.p ? `<span class="mrow__dot"></span>${price(it)}` : ``}
+      ${has(it) ? `<span class="mrow__dot"></span>${price(it)}` : ``}
     </div>`;
 
   function render(id){

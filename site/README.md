@@ -24,9 +24,19 @@ socials, hours, menu, gallery. Content checked against tracksbistro.ca — menu 
 hours, phone, email, socials and the "not a product of industry, but artisanship"
 line all come from there.
 
-**Prices are deliberately absent**, because Off the Tracks doesn't publish any. A stale
-price on a Maps listing is worse than no price. If that changes, add `p:"14.50"` to any
-item in `MENU` and it renders; leave it off and the row stays clean. No other edit needed.
+### Prices are indicative — read this before launch
+
+Off the Tracks doesn't publish prices anywhere. The numbers in `MENU` are market
+rates for Granville Island, put there so the finished design can be shown to the
+café. **They have not been confirmed by the business.**
+
+```js
+const SHOW_PRICES = true;   // app.js — set to false to hide every price site-wide
+```
+
+Before this serves real customers, either confirm each number against the till or
+set `SHOW_PRICES = false`. The layout is designed to look right either way: with
+prices off, the dot leaders disappear and the rows read as a clean list.
 
 Hours live in `HOURS` (24h clock, index 0 = Sunday). Change them there and the
 open/closed pill and the hours table both follow. The JSON-LD at the bottom of
