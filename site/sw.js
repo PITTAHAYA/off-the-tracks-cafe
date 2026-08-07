@@ -10,14 +10,16 @@
 
    Bump CACHE when you change the site and old copies should be dropped.
    ═══════════════════════════════════════════════════════════ */
-const CACHE = "ott-v1";
+const CACHE = "ott-v2";
 
 const SHELL = [
   "index.html", "menu.html", "place.html", "visit.html", "rewards.html",
-  "app.css", "app.js", "order.js", "reserve.js",
+  "app.css", "app.js", "order.js", "reserve.js", "rewards.js",
   "icons/icon-192.png", "icons/icon-512.png",
-  "assets/IMG_4173.jpg", "assets/IMG_4174.jpg", "assets/IMG_4195.jpg",
-  "assets/IMG_4196.jpg", "assets/IMG_4172.jpg", "assets/IMG_4184.jpg"
+  "assets/w/IMG_4173.webp",                                  // hero
+  "assets/w/IMG_4196-sm.webp", "assets/w/IMG_4195-sm.webp",   // the three doors
+  "assets/w/IMG_4172-sm.webp",
+  "assets/w/IMG_4184.webp", "assets/w/IMG_4174.webp"          // menu tab heroes
 ];
 
 self.addEventListener("install", e=>{

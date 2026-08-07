@@ -7,7 +7,12 @@
 "use strict";
 const $  = (s,r=document) => r.querySelector(s);
 const $$ = (s,r=document) => [...r.querySelectorAll(s)];
-const A  = "assets/";
+/* Photos are served as WebP at two sizes: full (≤1400px) for the hero and
+   lightbox, -sm (≤700px) for cards, doors and gallery thumbs. Roughly a
+   third of the JPEG weight. The originals stay in assets/ as a fallback. */
+const A   = "assets/";
+const IMG = (f, size) =>
+  "assets/w/" + f.replace(/\.jpg$/, "") + (size === "sm" ? "-sm" : "") + ".webp";
 
 /* ═══════════ EDIT HERE ═══════════ */
 
@@ -187,7 +192,7 @@ $$(".rv").forEach(el=>io.observe(el));
 
   const card = it => `<article class="mcard">
       <div class="mcard__ph">
-        <img class="fade" loading="lazy" src="${A+it.img}" alt="${it.n}">
+        <img class="fade" loading="lazy" src="${IMG(it.img,"sm")}" alt="${it.n}">
         ${it.tag ? `<span class="mcard__tag">${it.tag}</span>` : ``}
       </div>
       <div class="mcard__in">
@@ -210,7 +215,7 @@ $$(".rv").forEach(el=>io.observe(el));
     const c = MENU.find(m=>m.id===id);
     const hero = c.hero
       ? `<figure class="mhero">
-           <img class="fade" loading="lazy" src="${A+c.hero.img}" alt="${c.hero.cap}">
+           <img class="fade" loading="lazy" src="${IMG(c.hero.img)}" alt="${c.hero.cap}">
            <figcaption>${c.hero.cap}</figcaption>
          </figure>` : ``;
     const foot = c.foot ? `<p class="mfoot">${c.foot}</p>` : ``;
@@ -246,14 +251,14 @@ $$(".rv").forEach(el=>io.observe(el));
   const grid = $("#gal"); if(!grid) return;
   grid.innerHTML = GALLERY.map((g,i)=>
     `<button class="gitem" data-i="${i}" aria-label="Open photo ${i+1} of ${GALLERY.length}">
-       <img class="fade" loading="lazy" src="${A+g.img}" alt="${g.alt}"></button>`).join("");
+       <img class="fade" loading="lazy" src="${IMG(g.img,"sm")}" alt="${g.alt}"></button>`).join("");
   fadeIn(grid);
 
   const lb = $("#lb"), img = $("#lbImg"), count = $("#lbCount");
   let i = 0;
   function open(n){
     i = (n + GALLERY.length) % GALLERY.length;
-    img.src = A + GALLERY[i].img; img.alt = GALLERY[i].alt;
+    img.src = IMG(GALLERY[i].img); img.alt = GALLERY[i].alt;
     count.textContent = (i+1) + " / " + GALLERY.length;
     lb.classList.add("open");
     requestAnimationFrame(()=>lb.classList.add("show"));

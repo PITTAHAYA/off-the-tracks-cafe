@@ -51,7 +51,7 @@ on, that list is nine lines to update.
 
 | | tracksbistro.ca | this |
 |---|---|---|
-| Page weight | 6.7 MB, 61 requests | ~0.5 MB first view |
+| Home page weight | 6.7 MB, 61 requests | ~0.8 MB, 9 requests |
 | Structure | one long scrolling page | five pages, one job each |
 | Menu | 8 item names, no prices | full menu, photos, prices |
 | Order for pickup | — | cart, checkout, pickup times |
