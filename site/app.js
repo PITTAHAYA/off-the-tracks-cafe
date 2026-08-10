@@ -95,6 +95,31 @@ function paintStatus(){
 }
 paintStatus(); setInterval(paintStatus, 60000);
 
+/* ═══════════ desktop top nav ═══════════
+   On phones the rail lives at the bottom; on a wide screen that reads
+   as a shrunk-down app. So we inject a real horizontal nav into the
+   top bar — CSS shows it only past 900px and hides the bottom rail. */
+(function(){
+  const top = $(".top"); if(!top) return;
+  const here = (location.pathname.split("/").pop() || "index.html");
+  const links = [
+    ["index.html","Home"], ["menu.html","Menu"], ["place.html","Place"],
+    ["visit.html","Visit"], ["rewards.html","Stamps"]
+  ];
+  const nav = document.createElement("nav");
+  nav.className = "topnav";
+  nav.setAttribute("aria-label", "Primary");
+  nav.innerHTML = links.map(([h,l])=>
+    `<a href="${h}"${h===here?' aria-current="page"':''}>${l}</a>`).join("");
+  const cta = document.createElement("a");
+  cta.className = "topcta";
+  cta.href = "menu.html";
+  cta.textContent = "Order pickup";
+  const status = $(".status", top);
+  top.insertBefore(nav, status);
+  top.insertBefore(cta, status);
+})();
+
 /* ═══════════ hours table (visit page) ═══════════ */
 (function(){
   const box = $("#hours"); if(!box) return;

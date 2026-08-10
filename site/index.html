@@ -190,6 +190,25 @@ body{padding-bottom:var(--nav)}
   .door__t{top:auto;bottom:26px;justify-content:flex-end}
   .door__go{top:auto;bottom:30px;right:22px;margin:0}
 }
+
+@media(min-width:900px){
+  .door__t b{font-size:34px}
+  .special{justify-content:center}
+  .story{padding:70px var(--pad) 20px}
+  .story h2{font-size:40px}
+  .story p{font-size:17px;max-width:46ch}
+  /* reviews: a settled row of three, not a scroller */
+  .says{padding:20px 0 30px}
+  .says__track{
+    justify-content:center;overflow:visible;max-width:var(--maxw);margin:0 auto;
+    padding:0 var(--pad) 6px;
+  }
+  .say{width:auto;flex:1;max-width:340px}
+  .closer{padding:56px var(--pad) 70px}
+  .closer p{font-size:26px}
+  .closer .btn{display:inline-flex;min-width:210px;max-width:none;width:auto}
+  .closer .btn + .btn{margin-top:0;margin-left:10px}
+}
 </style>
 </head>
 <body class="on-navy">

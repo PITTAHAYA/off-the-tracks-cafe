@@ -106,6 +106,31 @@ body{background:var(--navy);color:var(--cream)}
 }
 
 @media(min-width:760px){ .acts{grid-template-columns:repeat(3,1fr)} .acts .btn:first-child{grid-column:auto} }
+
+/* ── desktop visit: map beside the details ─────────────── */
+@media(min-width:900px){
+  .head{padding-top:46px}
+  .head h1{font-size:60px}
+
+  .vtop{
+    max-width:var(--maxw);margin:26px auto 0;padding:0 var(--pad);
+    display:grid;grid-template-columns:1.35fr 1fr;gap:40px;align-items:start;
+  }
+  .map{margin:0;aspect-ratio:auto;height:100%;min-height:420px}
+  .vinfo{display:flex;flex-direction:column}
+  .addr{padding:0}
+  .addr b{font-size:28px}
+  .acts{padding:22px 0 0;grid-template-columns:1fr 1fr}
+  .acts .btn:first-child{grid-column:1/-1}
+  .hours{padding:26px 0 0}
+
+  /* booking, feedback, footer all share one centred measure */
+  .rsv{margin-top:52px}
+  .rsv > div,.say-hi,.reach,.foot{max-width:var(--maxw)}
+  .say-hi{padding-top:44px}
+  /* the booking grid is roomier with the extra width */
+  .slots{grid-template-columns:repeat(6,1fr)}
+}
 </style>
 </head>
 <body>
@@ -129,40 +154,44 @@ body{background:var(--navy);color:var(--cream)}
     <h1>Visit</h1>
   </div>
 
-  <div class="map">
-    <iframe title="Map showing Off the Tracks at 1363 Railspur Alley, Vancouver"
-      loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
-      src="https://www.google.com/maps?q=1363%20Railspur%20Alley%2C%20Vancouver%2C%20BC%20V6H%204G9&z=17&output=embed"></iframe>
+  <div class="vtop">
+    <div class="map">
+      <iframe title="Map showing Off the Tracks at 1363 Railspur Alley, Vancouver"
+        loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+        src="https://www.google.com/maps?q=1363%20Railspur%20Alley%2C%20Vancouver%2C%20BC%20V6H%204G9&z=17&output=embed"></iframe>
+    </div>
+
+    <div class="vinfo">
+      <address class="addr" style="font-style:normal">
+        <b>1363 Railspur Alley</b>
+        <span>Vancouver, BC &nbsp;V6H 4G9</span>
+        <a class="addr__tel" data-phone-text href="#" hidden></a>
+      </address>
+
+      <div class="acts">
+        <a class="btn btn--fill"
+           href="https://www.google.com/maps/dir/?api=1&destination=1363+Railspur+Alley,+Vancouver,+BC+V6H+4G9">
+          <svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          Directions
+        </a>
+        <button class="btn btn--out" id="copyBtn">
+          <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          Copy
+        </button>
+        <button class="btn btn--out" id="shareBtn">
+          <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+          Share
+        </button>
+        <!-- appears only once PHONE is set in app.js -->
+        <a class="btn btn--out" data-call href="#" hidden>
+          <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
+          Call
+        </a>
+      </div>
+
+      <div class="hours" id="hours"></div>
+    </div>
   </div>
-
-  <address class="addr" style="font-style:normal">
-    <b>1363 Railspur Alley</b>
-    <span>Vancouver, BC &nbsp;V6H 4G9</span>
-    <a class="addr__tel" data-phone-text href="#" hidden></a>
-  </address>
-
-  <div class="acts">
-    <a class="btn btn--fill"
-       href="https://www.google.com/maps/dir/?api=1&destination=1363+Railspur+Alley,+Vancouver,+BC+V6H+4G9">
-      <svg viewBox="0 0 24 24"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
-      Directions
-    </a>
-    <button class="btn btn--out" id="copyBtn">
-      <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-      Copy
-    </button>
-    <button class="btn btn--out" id="shareBtn">
-      <svg viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
-      Share
-    </button>
-    <!-- appears only once PHONE is set in app.js -->
-    <a class="btn btn--out" data-call href="#" hidden>
-      <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>
-      Call
-    </a>
-  </div>
-
-  <div class="hours" id="hours"></div>
 
   <!-- booking: rendered by reserve.js, slots derived from the hours above -->
   <section class="rsv"><div id="reserve"></div></section>

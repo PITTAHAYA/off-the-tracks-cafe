@@ -104,7 +104,45 @@
 }
 .note b{font-family:var(--serif);color:var(--ink);display:block;font-size:14.5px;margin-bottom:2px}
 
-@media(min-width:760px){ .mgrid{grid-template-columns:repeat(4,1fr);gap:16px} }
+@media(min-width:760px){ .mgrid{grid-template-columns:repeat(3,1fr);gap:16px} }
+
+/* ── desktop menu: centred, roomy, a real grid ─────────── */
+@media(min-width:900px){
+  .head{max-width:var(--maxw);margin:0 auto;padding:44px var(--pad) 8px;text-align:center}
+  .head h1{font-size:60px}
+  .tabs{
+    padding:16px var(--pad);background:rgba(246,241,231,.92);
+    border-bottom:1px solid var(--line);
+  }
+  .tabs__row{max-width:var(--maxw);margin:0 auto;justify-content:center;gap:10px}
+  .tab{font-size:11px;padding:11px 20px;min-height:42px}
+
+  .panel{padding:38px var(--pad) 60px}
+
+  /* tab hero becomes a contained banner, not a giant square */
+  .mhero{max-width:var(--maxw);margin:0 auto 34px;position:relative}
+  .mhero img{aspect-ratio:21/7;max-height:340px;border-radius:5px}
+  .mhero figcaption{
+    position:absolute;left:20px;bottom:16px;margin:0;color:var(--cream);
+    text-shadow:0 1px 8px rgba(12,20,32,.6);
+  }
+
+  .mgrid{grid-template-columns:repeat(4,1fr);gap:20px}
+  .mcard{border-radius:5px}
+  .mcard__in{padding:14px 15px 16px}
+  .mcard h3{font-size:16.5px}
+  .mcard__d{font-size:12.5px}
+
+  /* drinks split into two columns, each a clean price list */
+  .mrows{columns:2;column-gap:56px;border-top:0}
+  .mrow{
+    break-inside:avoid;border-top:1px solid var(--line);border-bottom:0;
+    padding:14px 0;
+  }
+  .mfoot,.legend{text-align:center}
+  .legend{justify-content:center}
+}
+@media(min-width:1200px){ .mrows{column-gap:80px} }
 </style>
 </head>
 <body>

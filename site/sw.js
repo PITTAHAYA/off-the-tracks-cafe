@@ -10,7 +10,7 @@
 
    Bump CACHE when you change the site and old copies should be dropped.
    ═══════════════════════════════════════════════════════════ */
-const CACHE = "ott-v4";
+const CACHE = "ott-v5";
 
 const SHELL = [
   "index.html", "menu.html", "place.html", "visit.html", "rewards.html",

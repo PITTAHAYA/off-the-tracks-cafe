@@ -83,6 +83,9 @@ p{margin:0 0 .9em}
   background:rgba(15,26,42,.35)}
 .top--dark .status__dot{background:#79C08C}
 
+/* injected by app.js; only shown on desktop */
+.topnav,.topcta{display:none}
+
 /* ═══ BOTTOM NAV — the line, with four stops ════════════ */
 .line{
   position:fixed;left:0;right:0;bottom:0;z-index:80;height:var(--nav);
@@ -350,6 +353,64 @@ p{margin:0 0 .9em}
   .sheet__panel{left:50%;transform:translate(-50%,100%);max-width:540px;border-radius:14px 14px 0 0}
   .sheet.show .sheet__panel{transform:translate(-50%,0)}
   .slots{grid-template-columns:repeat(5,1fr)}
+}
+
+/* ═══════════════════════════════════════════════════════
+   DESKTOP — a proper site, not a stretched phone.
+   The bottom rail becomes a real top nav; content gets room.
+   ═══════════════════════════════════════════════════════ */
+@media(min-width:900px){
+  :root{--nav:0px;--top:70px;--pad:56px}
+
+  body{padding-bottom:0}
+
+  /* the rail retires; the top bar does the work */
+  .line{display:none}
+
+  .top{
+    padding:0 var(--pad);gap:34px;
+    box-shadow:0 1px 0 rgba(27,26,23,.06);
+  }
+  .top--dark{box-shadow:none}   /* transparent over the hero */
+  .top__name{font-size:19px;gap:11px}
+  .top__name svg{width:24px;height:24px}
+
+  .topnav{
+    display:flex;align-items:center;gap:30px;margin-left:8px;margin-right:auto;
+  }
+  .topnav a{
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-60);padding:6px 0;position:relative;transition:color .2s var(--ease);
+  }
+  .topnav a::after{
+    content:"";position:absolute;left:0;right:0;bottom:-2px;height:1.5px;
+    background:var(--terra);transform:scaleX(0);transform-origin:left;
+    transition:transform .25s var(--ease);
+  }
+  .topnav a:hover{color:var(--ink)}
+  .topnav a:hover::after{transform:scaleX(1)}
+  .topnav a[aria-current="page"]{color:var(--ink)}
+  .topnav a[aria-current="page"]::after{transform:scaleX(1)}
+
+  .topcta{
+    display:inline-flex;align-items:center;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;
+    background:var(--terra);color:#fff;padding:11px 18px;border-radius:100px;
+    transition:transform .2s var(--ease),box-shadow .25s var(--ease);
+  }
+  .topcta:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(196,99,60,.28)}
+
+  /* dark top bars (home hero, visit) get light-on-dark nav */
+  .top--dark .topnav a,.on-navy .topnav a{color:rgba(246,241,231,.72)}
+  .top--dark .topnav a:hover,.top--dark .topnav a[aria-current="page"],
+  .on-navy .topnav a:hover,.on-navy .topnav a[aria-current="page"]{color:var(--cream)}
+
+  /* the floating cart pill moves to the corner, out of the way */
+  .cartpill{left:auto;right:24px;bottom:24px;transform:none}
+  .cartpill.pop{animation:none}
+  @keyframes pillIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .install{left:auto;right:20px;bottom:20px;max-width:360px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
