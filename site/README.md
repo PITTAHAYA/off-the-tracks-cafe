@@ -13,7 +13,9 @@ site/
   rewards.html  Stamps   — ten-coffee loyalty card
 
   app.css       shared styles
-  app.js        shared behaviour + ALL editable content
+  content.js    ALL editable content — edit via admin.html
+  admin.html    browser editor (noindex, not linked)
+  app.js        shared behaviour
   order.js      cart, checkout, pickup slots
   reserve.js    table booking
   rewards.js    stamp card
@@ -29,10 +31,10 @@ pictures carry the rest.
 
 ## Content
 
-Everything editable is in one block at the top of `app.js`: phone, email, address,
-socials, hours, menu, gallery. Content checked against tracksbistro.ca — menu items,
-hours, phone, email, socials and the "not a product of industry, but artisanship"
-line all come from there.
+Everything the café changes lives in **`content.js`**, edited through **`admin.html`**
+(see below) — today's board, menu, prices, hours, reviews, contacts. Content was checked
+against tracksbistro.ca: menu items, hours, phone, email, socials and the "not a product
+of industry, but artisanship" line all come from there.
 
 ### Prices are indicative — read this before launch
 
@@ -41,16 +43,17 @@ rates for Granville Island, put there so the finished design can be shown to the
 café. **They have not been confirmed by the business.**
 
 ```js
-const SHOW_PRICES = true;   // app.js — set to false to hide every price site-wide
+showPrices: true,   // content.js — false hides every price site-wide
 ```
+Or untick "Show prices on the website" in admin.html.
 
 Before this serves real customers, either confirm each number against the till or
 set `SHOW_PRICES = false`. The layout is designed to look right either way: with
 prices off, the dot leaders disappear and the rows read as a clean list.
 
-Hours live in `HOURS` (24h clock, index 0 = Sunday). Change them there and the
-open/closed pill and the hours table both follow. The JSON-LD at the bottom of
-`index.html` is hand-written and needs the same edit.
+Hours live in `content.js` → `hours` (24h clock, index 0 = Sunday). Change them and the
+open/closed pill, the hours table, the pickup slots and the booking grid all follow. The
+JSON-LD at the bottom of `index.html` is hand-written and needs the same edit.
 
 Two menu items are worth a look before launch: `Baked` names the pastries generically
 (Croissant, Cruffin, Tarts, Cakes, Pies) since the actual case rotates daily, and the
@@ -88,11 +91,6 @@ Bump `CACHE` in `sw.js` when you want returning visitors to drop their old copy.
 own browser — no account, no personal data held. **In the demo the button stamps the
 card itself.** In production a stamp must come from the café's side (a rotating QR at
 the till, or a code from the POS) or customers can stamp their own. `stamp()` is the seam.
-
-## Reviews
-
-The three quotes on the home page are illustrative. Replace them with real verbatim
-Google reviews, or delete the `.says` section — don't ship invented attributed quotes.
 
 ## Ordering and booking are SIMULATED
 
