@@ -57,31 +57,31 @@ window.OTT_CONTENT = {
     { id:"coffee", label:"Coffee", style:"rows",
       foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
       items:[
-        {n:"Drip Coffee",          sizes:"8 · 12 · 16oz"},
-        {n:"Iced Drip Coffee",     sizes:"12 · 16oz"},
-        {n:"Espresso",             sizes:"2oz"},
-        {n:"Americano",            sizes:"8 · 12 · 16oz"},
-        {n:"Latte",                sizes:"8 · 12 · 16oz"},
-        {n:"Cappuccino",           sizes:"8 · 12 · 16oz"},
-        {n:"Mocha",                sizes:"8 · 12 · 16oz"},
-        {n:"White Chocolate Mocha",sizes:"8 · 12 · 16oz"},
-        {n:"Cortado",              sizes:"5oz"},
-        {n:"Flat White",           sizes:"8oz"},
-        {n:"Espresso Macchiato",   sizes:"3oz"},
-        {n:"Caramel Macchiato",    sizes:"8 · 12 · 16oz"},
-        {n:"Dirty Chai Latte",     sizes:"8 · 12 · 16oz"}
+        {n:"Drip Coffee",          p:"3.50", sizes:"8 · 12 · 16oz"},
+        {n:"Iced Drip Coffee",     p:"4.00", sizes:"12 · 16oz"},
+        {n:"Espresso",             p:"3.25", sizes:"2oz"},
+        {n:"Americano",            p:"3.75", sizes:"8 · 12 · 16oz"},
+        {n:"Latte",                p:"5.00", sizes:"8 · 12 · 16oz"},
+        {n:"Cappuccino",           p:"5.00", sizes:"8 · 12 · 16oz"},
+        {n:"Mocha",                p:"5.50", sizes:"8 · 12 · 16oz"},
+        {n:"White Chocolate Mocha",p:"5.75", sizes:"8 · 12 · 16oz"},
+        {n:"Cortado",              p:"4.25", sizes:"5oz"},
+        {n:"Flat White",           p:"4.75", sizes:"8oz"},
+        {n:"Espresso Macchiato",   p:"3.75", sizes:"3oz"},
+        {n:"Caramel Macchiato",    p:"5.75", sizes:"8 · 12 · 16oz"},
+        {n:"Dirty Chai Latte",     p:"5.75", sizes:"8 · 12 · 16oz"}
     ]},
 
     { id:"noncoffee", label:"Non-Coffee", style:"rows",
       foot:"Add-ons: oat, almond, soy or coconut milk · syrups · whipped cream · espresso shot · liqueur.",
       items:[
-        {n:"Matcha Latte",    sizes:"8 · 12 · 16oz"},
-        {n:"Chai Latte",      sizes:"8 · 12 · 16oz"},
-        {n:"Turmeric Latte",  sizes:"8 · 12 · 16oz"},
-        {n:"London Fog",      sizes:"8 · 12 · 16oz"},
-        {n:"Hot Chocolate",   sizes:"8 · 12 · 16oz"},
-        {n:"Tea",             sizes:"8 · 12 · 16oz", note:"hot or iced"},
-        {n:"Lemonade",        sizes:"8 · 12 · 16oz", note:"mango · coconut · strawberry · plain"}
+        {n:"Matcha Latte",    p:"5.75", sizes:"8 · 12 · 16oz"},
+        {n:"Chai Latte",      p:"5.25", sizes:"8 · 12 · 16oz"},
+        {n:"Turmeric Latte",  p:"5.25", sizes:"8 · 12 · 16oz"},
+        {n:"London Fog",      p:"5.00", sizes:"8 · 12 · 16oz"},
+        {n:"Hot Chocolate",   p:"4.75", sizes:"8 · 12 · 16oz"},
+        {n:"Tea",             p:"4.00", sizes:"8 · 12 · 16oz", note:"hot or iced"},
+        {n:"Lemonade",        p:"5.50", sizes:"8 · 12 · 16oz", note:"mango · coconut · strawberry · plain"}
     ]},
 
     { id:"sandwiches", label:"Sandwiches", style:"list",
@@ -130,7 +130,7 @@ window.OTT_CONTENT = {
     { id:"soup", label:"Soup", style:"rows",
       foot:"Ask your barista for today's pot.",
       items:[
-        {n:"Soup of the Week", note:"changes daily"}
+        {n:"Soup of the Week", p:"9.00", note:"changes daily"}
     ]}
   ]
 };
