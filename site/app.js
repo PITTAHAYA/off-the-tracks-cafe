@@ -194,6 +194,8 @@ $$(".rv").forEach(el=>io.observe(el));
       </div>` : placeholder(it)}
       <div class="mcard__in">
         <h3>${it.n}</h3>
+        ${it.d ? `<p class="mcard__d">${it.d}</p>` : ``}
+        ${it.on ? `<p class="mcard__on">${it.on}</p>` : ``}
         <div class="mcard__foot">
           ${price(it)}
           ${it.diet ? it.diet.map(c=>`<span class="chip">${c}</span>`).join("") : ``}
@@ -206,6 +208,7 @@ $$(".rv").forEach(el=>io.observe(el));
       <span class="mrow__n">${it.n}${it.note ? `<i>${it.note}</i>` : ``}</span>
       ${has(it) ? `<span class="mrow__dot"></span>${price(it)}` : ``}
       ${addBtn(it)}
+      ${it.sizes ? `<span class="mrow__sizes">${it.sizes}</span>` : ``}
     </div>`;
 
   function render(id){

@@ -54,49 +54,69 @@ window.OTT_CONTENT = {
      img: a file in assets/ (e.g. "IMG_4180.jpg"). Leave it out
      and the card shows a placeholder until a photo exists.  */
   menu: [
-    { id:"eats", label:"Eats", style:"cards",
-      foot:"Sandwiches on certified organic bread from A Bread Affair.",
-      items:[
-        {n:"Avocado Toast",     p:"16.50", img:"IMG_4184.jpg", tag:"Favourite", diet:["V"]},
-        {n:"Chicken Fig",       p:"18.50", img:"IMG_4180.jpg"},
-        {n:"Egg Sandwich",      p:"14.00", note:"bacon or avocado"},
-        {n:"Breakfast Burrito", p:"16.00"},
-        {n:"Grilled Cheese",    p:"14.50", diet:["V"]},
-        {n:"Tomato Pesto",      p:"14.50", diet:["V"]},
-        {n:"Chicken Club",      p:"18.50"},
-        {n:"Beet-L-T",          p:"16.00", diet:["V"]},
-        {n:"Sides",             p:"6.50",  note:"fries, soup or salad"}
-    ]},
-
-    { id:"baked", label:"Baked", style:"cards",
-      foot:"Baked fresh every morning. Come early to see what's in.",
-      items:[
-        {n:"Croissant",         p:"4.75", img:"IMG_4190.jpg", diet:["V"]},
-        {n:"Pain au Chocolat",  p:"5.25", img:"IMG_4191.jpg", diet:["V"]},
-        {n:"Cruffin",           p:"6.25", img:"IMG_4185.jpg", tag:"Favourite", diet:["V"]},
-        {n:"Loaf Cake",         p:"5.00", img:"IMG_4188.jpg", diet:["V"]},
-        {n:"Macarons",          p:"3.00", img:"IMG_4183.jpg", diet:["GF"]},
-        {n:"Tarts",             p:"7.00", img:"IMG_4194.jpg", diet:["V"]},
-        {n:"Cakes",             p:"6.75", img:"IMG_4234.jpg", diet:["V"]},
-        {n:"Pies",              p:"7.25", img:"IMG_4193.jpg", diet:["V"]}
-    ]},
-
-    { id:"drinks", label:"Drinks", style:"rows",
+    { id:"coffee", label:"Coffee", style:"rows",
       hero:{img:"IMG_4174.jpg", cap:"Cappuccino, on the terrace"},
       foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
       items:[
-        {n:"Espresso",   p:"3.50"},
-        {n:"Americano",  p:"4.00"},
-        {n:"Cortado",    p:"4.50"},
-        {n:"Flat White", p:"5.00"},
-        {n:"Cappuccino", p:"5.00"},
-        {n:"Latte",      p:"5.25"},
-        {n:"Mocha",      p:"5.75"},
-        {n:"Tea",        p:"4.00"},
-        {n:"Craft Beer", p:"8.50", note:"local, rotating"},
-        {n:"Wine",       p:"11.00"},
-        {n:"Cocktails",  p:"13.00"},
-        {n:"Spirits",    p:"10.00"}
+        {n:"Drip Coffee",          sizes:"8 · 12 · 16oz"},
+        {n:"Iced Drip Coffee",     sizes:"12 · 16oz"},
+        {n:"Espresso",             sizes:"2oz"},
+        {n:"Americano",            sizes:"8 · 12 · 16oz"},
+        {n:"Latte",                sizes:"8 · 12 · 16oz"},
+        {n:"Cappuccino",           sizes:"8 · 12 · 16oz"},
+        {n:"Mocha",                sizes:"8 · 12 · 16oz"},
+        {n:"White Chocolate Mocha",sizes:"8 · 12 · 16oz"},
+        {n:"Cortado",              sizes:"5oz"},
+        {n:"Flat White",           sizes:"8oz"},
+        {n:"Espresso Macchiato",   sizes:"3oz"},
+        {n:"Caramel Macchiato",    sizes:"8 · 12 · 16oz"},
+        {n:"Dirty Chai Latte",     sizes:"8 · 12 · 16oz"}
+    ]},
+
+    { id:"noncoffee", label:"Non-Coffee", style:"rows",
+      foot:"Add-ons: oat, almond, soy or coconut milk · syrups · whipped cream · espresso shot · liqueur.",
+      items:[
+        {n:"Matcha Latte",    sizes:"8 · 12 · 16oz"},
+        {n:"Chai Latte",      sizes:"8 · 12 · 16oz"},
+        {n:"Turmeric Latte",  sizes:"8 · 12 · 16oz"},
+        {n:"London Fog",      sizes:"8 · 12 · 16oz"},
+        {n:"Hot Chocolate",   sizes:"8 · 12 · 16oz"},
+        {n:"Tea",             sizes:"8 · 12 · 16oz", note:"hot or iced"},
+        {n:"Lemonade",        sizes:"8 · 12 · 16oz", note:"mango · coconut · strawberry · plain"}
+    ]},
+
+    { id:"sandwiches", label:"Sandwiches", style:"cards",
+      foot:"Made fresh in-house. Served with kettle chips or bistro salad.",
+      items:[
+        {n:"Sunrise Sandwich", p:"14.00", img:"IMG_4184.jpg", tag:"Favourite",
+         d:"Hard egg, arugula, cheddar, garlic mayo, bacon.", on:"On a brioche bun"},
+        {n:"B.A.T",            p:"14.00",
+         d:"Bacon, arugula, tomato, garlic mayo.", on:"On sourdough"},
+        {n:"Reuben",           p:"16.00",
+         d:"Corned beef, Swiss, sauerkraut, thousand island.", on:"On rye"},
+        {n:"Chicken Sandwich", p:"18.00", img:"IMG_4180.jpg",
+         d:"Chicken breast, garlic mayo, arugula, tomato, Swiss, onion jam.", on:"On a baguette"},
+        {n:"Tofu Sandwich",    p:"16.00", diet:["V"],
+         d:"Smoked tofu, vegan mayo, arugula, tomato, cucumber, guacamole.", on:"On sourdough"},
+        {n:"Grilled Cheese",   p:"14.00", diet:["V"],
+         d:"Cheddar, Swiss, mozzarella & pepperjack.", on:"On sourdough"}
+    ]},
+
+    { id:"baked", label:"Baked", style:"cards",
+      foot:"Bagels and pastries baked daily. Come early to see what's in.",
+      items:[
+        {n:"Lox",             p:"14.00", img:"IMG_4182.jpg",
+         d:"Smoked salmon, cream cheese, dill, onions.", on:"Everything or plain bagel"},
+        {n:"Toasted Bagel",   p:"5.00",  note:"cream cheese or butter"},
+        {n:"House Muffin",    p:"4.50",  img:"IMG_4188.jpg", note:"ask for today's", diet:["V"]},
+        {n:"Butter Croissant",p:"4.75",  img:"IMG_4190.jpg", diet:["V"]},
+        {n:"Scones",          p:"4.50",  note:"savoury & sweet — ask for today's", diet:["V"]}
+    ]},
+
+    { id:"soup", label:"Soup", style:"rows",
+      foot:"Ask your barista for today's pot.",
+      items:[
+        {n:"Soup of the Week", note:"changes daily"}
     ]}
   ]
 };
