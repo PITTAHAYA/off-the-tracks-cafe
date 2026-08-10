@@ -10,11 +10,11 @@
 
    Bump CACHE when you change the site and old copies should be dropped.
    ═══════════════════════════════════════════════════════════ */
-const CACHE = "ott-v2";
+const CACHE = "ott-v3";
 
 const SHELL = [
   "index.html", "menu.html", "place.html", "visit.html", "rewards.html",
-  "app.css", "app.js", "order.js", "reserve.js", "rewards.js",
+  "app.css", "app.js", "content.js", "order.js", "reserve.js", "rewards.js",
   "icons/icon-192.png", "icons/icon-512.png",
   "assets/w/IMG_4173.webp",                                  // hero
   "assets/w/IMG_4196-sm.webp", "assets/w/IMG_4195-sm.webp",   // the three doors

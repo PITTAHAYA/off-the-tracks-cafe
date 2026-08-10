@@ -14,17 +14,22 @@ const A   = "assets/";
 const IMG = (f, size) =>
   "assets/w/" + f.replace(/\.jpg$/, "") + (size === "sm" ? "-sm" : "") + ".webp";
 
-/* ═══════════ EDIT HERE ═══════════ */
+/* ═══════════════════════════════════════════════════════════
+   CONTENT comes from content.js, which the café edits through
+   admin.html. The fallbacks below only matter if content.js
+   fails to load, so the site degrades to something correct
+   rather than to a blank page.
+   ═══════════════════════════════════════════════════════════ */
+const C = window.OTT_CONTENT || {};
 
-const PHONE   = "+16046898700";          // displayed as (604) 689-8700
-const EMAIL   = "info@tracksbistro.ca";
-const ADDRESS = "1363 Railspur Alley, Vancouver, BC V6H 4G9";
-const SOCIAL  = {
-  instagram:"https://www.instagram.com/offthetracksbistro/",
-  facebook: "https://www.facebook.com/tracksbistro"
-};
+const PHONE   = C.phone   || "";
+const EMAIL   = C.email   || "info@tracksbistro.ca";
+const ADDRESS = C.address || "1363 Railspur Alley, Vancouver, BC V6H 4G9";
+const SOCIAL  = { instagram:C.instagram || "", facebook:C.facebook || "" };
+const SPECIAL = C.special || {text:""};
+const REVIEWS = C.reviews || {quotes:[]};
 
-const HOURS = [         // index 0 = Sunday … 6 = Saturday, 24h clock
+const HOURS = C.hours || [        // index 0 = Sunday … 6 = Saturday, 24h clock
   {day:"Sunday",    open:9, close:17},
   {day:"Monday",    open:9, close:16},
   {day:"Tuesday",   open:9, close:16},
@@ -34,64 +39,9 @@ const HOURS = [         // index 0 = Sunday … 6 = Saturday, 24h clock
   {day:"Saturday",  open:9, close:17}
 ];
 
-/* ── PRICES ──────────────────────────────────────────────────────────
-   The items below are the real ones Off the Tracks publishes on
-   tracksbistro.ca. The PRICES ARE INDICATIVE — the café publishes none,
-   so these are market rates for Granville Island, set here to show the
-   client what a finished menu looks like.
+const SHOW_PRICES = C.showPrices !== false;
 
-   Flip SHOW_PRICES to false and every price disappears site-wide, in one
-   edit, leaving the honest version. Do that before the real launch unless
-   the café has confirmed each number.
-   ─────────────────────────────────────────────────────────────────── */
-const SHOW_PRICES = true;
-
-const MENU = [
-  { id:"eats", label:"Eats", style:"rows",
-    hero:{img:"IMG_4184.jpg", cap:"Avocado toast"},
-    foot:"Sandwiches on certified organic bread from A Bread Affair.",
-    items:[
-      {n:"Avocado Toast",     p:"16.50"},
-      {n:"Egg Sandwich",      p:"14.00", note:"bacon or avocado"},
-      {n:"Breakfast Burrito", p:"16.00"},
-      {n:"Grilled Cheese",    p:"14.50"},
-      {n:"Tomato Pesto",      p:"14.50"},
-      {n:"Chicken Club",      p:"18.50"},
-      {n:"Chicken Fig",       p:"18.50"},
-      {n:"Beet-L-T",          p:"16.00"},
-      {n:"Sides",             p:"6.50",  note:"fries, soup or salad"}
-  ]},
-
-  { id:"baked", label:"Baked", style:"cards",
-    foot:"Baked fresh every morning. Come early to see what's in.",
-    items:[
-      {n:"Croissant",         p:"4.75", img:"IMG_4190.jpg", diet:["V"]},
-      {n:"Pain au Chocolat",  p:"5.25", img:"IMG_4191.jpg", diet:["V"]},
-      {n:"Cruffin",           p:"6.25", img:"IMG_4185.jpg", tag:"Favourite", diet:["V"]},
-      {n:"Loaf Cake",         p:"5.00", img:"IMG_4188.jpg", diet:["V"]},
-      {n:"Macarons",          p:"3.00", img:"IMG_4183.jpg", diet:["GF"]},
-      {n:"Tarts",             p:"7.00", img:"IMG_4194.jpg", diet:["V"]},
-      {n:"Cakes",             p:"6.75", img:"IMG_4234.jpg", diet:["V"]},
-      {n:"Pies",              p:"7.25", img:"IMG_4193.jpg", diet:["V"]}
-  ]},
-
-  { id:"drinks", label:"Drinks", style:"rows",
-    hero:{img:"IMG_4174.jpg", cap:"Cappuccino, on the terrace"},
-    foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
-    items:[
-      {n:"Espresso",   p:"3.50"},
-      {n:"Americano",  p:"4.00"},
-      {n:"Cortado",    p:"4.50"},
-      {n:"Flat White", p:"5.00"},
-      {n:"Cappuccino", p:"5.00"},
-      {n:"Latte",      p:"5.25"},
-      {n:"Mocha",      p:"5.75"},
-      {n:"Tea",        p:"4.00"},
-      {n:"Craft Beer", p:"8.50", note:"local, rotating"},
-      {n:"Wine",       p:"11.00"},
-      {n:"Spirits",    p:"10.00"}
-  ]}
-];
+const MENU = C.menu || [];
 
 const GALLERY = [
   {img:"IMG_4173.jpg", alt:"Railspur Alley in the sun, the café's timber frame and navy umbrella, Granville Street Bridge behind."},
@@ -157,6 +107,43 @@ paintStatus(); setInterval(paintStatus, 60000);
   }).join("");
 })();
 
+/* ═══════════ today's board (home) ═══════════
+   Hidden entirely unless the café has written something. */
+(function(){
+  const box = $("#special"); if(!box) return;
+  if(!SPECIAL.text){ box.remove(); return; }
+  box.innerHTML = `<span class="special__k">Today</span>
+    <span class="special__v">${SPECIAL.text}</span>
+    ${SPECIAL.until ? `<span class="special__u">${SPECIAL.until}</span>` : ``}`;
+  box.hidden = false;
+})();
+
+/* ═══════════ reviews (home) ═══════════
+   Rating and count come from the café's Google listing. Quotes are
+   only shown if real ones have been pasted into content.js — the
+   section never invents them. */
+(function(){
+  const box = $("#says"); if(!box) return;
+  const r = REVIEWS;
+  const stars = n => "★★★★★".slice(0, Math.round(n)).padEnd(5, "☆");
+  const head = r.rating ? `
+    <a class="rating" href="${r.url || "#"}" target="_blank" rel="noopener">
+      <span class="rating__s" aria-hidden="true">${stars(r.rating)}</span>
+      <span class="rating__n">${r.rating.toFixed(1)}</span>
+      <span class="rating__c">${r.count ? r.count + " reviews on Google" : "on Google"} →</span>
+    </a>` : ``;
+  const quotes = (r.quotes && r.quotes.length) ? `
+    <div class="says__track">
+      ${r.quotes.map(q=>`
+        <blockquote class="say">
+          <p>${q.text}</p>
+          <cite>${q.who || "Google review"}</cite>
+        </blockquote>`).join("")}
+    </div>` : ``;
+  if(!head && !quotes){ box.remove(); return; }
+  box.innerHTML = `<p class="says__t">What regulars say</p>${head}${quotes}`;
+})();
+
 /* ═══════════ image fade-in ═══════════ */
 function fadeIn(root=document){
   $$("img.fade", root).forEach(img=>{
@@ -190,11 +177,21 @@ $$(".rv").forEach(el=>io.observe(el));
                aria-label="Add ${it.n} to your order">+</button>`
     : ``;
 
+  /* Items awaiting a photo get the house mark rather than a broken tile,
+     so the grid still reads as finished while the shot list gets done. */
+  const placeholder = it => `<div class="mcard__ph mcard__ph--none" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.1"/>
+        <path d="M3.5 12h17M7 9v6M11 9v6M15 9v6" stroke="currentColor"
+              stroke-width="1.1" stroke-linecap="round"/>
+      </svg>
+    </div>`;
+
   const card = it => `<article class="mcard">
-      <div class="mcard__ph">
+      ${it.img ? `<div class="mcard__ph">
         <img class="fade" loading="lazy" src="${IMG(it.img,"sm")}" alt="${it.n}">
         ${it.tag ? `<span class="mcard__tag">${it.tag}</span>` : ``}
-      </div>
+      </div>` : placeholder(it)}
       <div class="mcard__in">
         <h3>${it.n}</h3>
         <div class="mcard__foot">

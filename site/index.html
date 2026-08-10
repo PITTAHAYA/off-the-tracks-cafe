@@ -150,7 +150,28 @@ body{padding-bottom:var(--nav)}
   flex:none;width:76vw;max-width:330px;scroll-snap-align:start;
   background:var(--cream-2);border:1px solid var(--line);border-radius:3px;padding:20px 20px 18px;
 }
-.say__stars{color:var(--brass);font-size:12px;letter-spacing:.22em;margin-bottom:10px}
+.rating{
+  display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:22px;text-decoration:none;
+}
+.rating__s{color:var(--brass);font-size:15px;letter-spacing:.14em}
+.rating__n{font-family:var(--serif);font-size:21px;font-weight:600}
+.rating__c{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-40);
+}
+/* today's board — hidden unless the café writes something */
+.special{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  padding:15px var(--pad);background:var(--brass);color:#241a09;
+}
+.special__k{
+  font-family:var(--mono);font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  background:rgba(36,26,9,.16);padding:4px 8px;border-radius:2px;flex:none;
+}
+.special__v{font-family:var(--serif);font-size:17px;font-weight:600;letter-spacing:-.015em}
+.special__u{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;opacity:.6}
 .say p{font-family:var(--serif);font-size:16px;line-height:1.45;margin:0 0 12px;letter-spacing:-.01em}
 .say cite{
   font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
@@ -216,6 +237,8 @@ body{padding-bottom:var(--nav)}
   </a>
 </nav>
 
+<div class="special" id="special" hidden></div>
+
 <section class="creed">
   <p class="rv">Not a product of industry, but <b>artisanship</b>.</p>
 </section>
@@ -240,26 +263,7 @@ body{padding-bottom:var(--nav)}
   </blockquote>
 </section>
 
-<section class="says">
-  <p class="says__t rv">What regulars say</p>
-  <div class="says__track">
-    <blockquote class="say">
-      <div class="say__stars" aria-label="Five stars">★★★★★</div>
-      <p>The almond croissant is the best I've had on this side of the water.</p>
-      <cite>Google review</cite>
-    </blockquote>
-    <blockquote class="say">
-      <div class="say__stars" aria-label="Five stars">★★★★★</div>
-      <p>Quiet end of the island, real espresso, and nobody rushes you.</p>
-      <cite>Google review</cite>
-    </blockquote>
-    <blockquote class="say">
-      <div class="say__stars" aria-label="Five stars">★★★★★</div>
-      <p>Sat outside with a cappuccino and forgot I had somewhere to be.</p>
-      <cite>Google review</cite>
-    </blockquote>
-  </div>
-</section>
+<section class="says" id="says"></section>
 
 <section class="closer">
   <p class="rv">Enjoy the company.</p>
@@ -287,6 +291,7 @@ body{padding-bottom:var(--nav)}
 </nav>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="content.js"></script>
 <script src="app.js"></script>
 <script src="order.js"></script>
 

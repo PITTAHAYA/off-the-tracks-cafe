@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Edit the site — Off the Tracks</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap">
+
+<style>
+:root{
+  --navy:#14243A; --terra:#C4633C; --brass:#C89B5A; --fir:#22402E;
+  --cream:#F6F1E7; --cream-2:#EFE7D9; --ink:#1B1A17; --ink-60:#57534A; --ink-40:#8C8579;
+  --line:rgba(27,26,23,.16);
+  --serif:'Fraunces',Georgia,serif; --sans:'Inter',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;background:var(--cream);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:110px;
+}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+
+.bar{
+  position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;
+  padding:14px 20px;background:var(--navy);color:var(--cream);
+}
+.bar h1{font-family:var(--serif);font-size:17px;margin:0;font-weight:600;flex:1}
+.bar__hint{font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(246,241,231,.5)}
+
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+.intro{
+  background:var(--cream-2);border-left:3px solid var(--brass);
+  padding:16px 18px;margin:22px 0 6px;font-size:14px;line-height:1.65;color:var(--ink-60);
+}
+.intro b{color:var(--ink);font-family:var(--serif);font-size:15.5px}
+
+details{border-bottom:1px solid var(--line)}
+summary{
+  padding:18px 2px;font-family:var(--serif);font-size:19px;font-weight:600;
+  cursor:pointer;list-style:none;display:flex;align-items:center;gap:10px;
+}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";color:var(--terra);font-family:var(--mono);font-size:15px;width:14px}
+details[open] summary::before{content:"–"}
+summary em{font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-40);margin-left:auto}
+.body{padding:0 0 22px}
+
+label{display:block;margin-bottom:14px}
+label span{
+  display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-40);margin-bottom:6px;
+}
+input,textarea,select{
+  width:100%;min-height:44px;padding:10px 12px;font:inherit;font-size:16px;
+  background:#fff;border:1px solid var(--line);border-radius:3px;color:var(--ink);
+}
+textarea{min-height:80px;resize:vertical;line-height:1.5}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hint{font-size:12.5px;color:var(--ink-40);margin:-8px 0 14px}
+
+/* menu editing */
+.cat{border:1px solid var(--line);border-radius:4px;margin-bottom:14px;background:#fff}
+.cat__h{
+  display:flex;align-items:center;gap:10px;padding:12px 14px;
+  border-bottom:1px solid var(--line);background:var(--cream-2);
+}
+.cat__h b{font-family:var(--serif);font-size:16px;flex:1}
+.items{padding:6px 14px 14px}
+.item{
+  display:grid;grid-template-columns:1fr 90px 34px;gap:8px;align-items:center;
+  padding:9px 0;border-bottom:1px solid var(--line);
+}
+.item:last-child{border-bottom:0}
+.item input{min-height:40px;margin:0}
+.item__ph{
+  grid-column:1/-1;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-40);display:flex;align-items:center;gap:8px;
+}
+.item__ph.none{color:var(--terra)}
+.del{color:var(--ink-40);font-size:18px;width:34px;height:40px}
+.del:hover{color:var(--terra)}
+.addrow{
+  margin-top:10px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--terra);padding:8px 0;
+}
+
+.hrs{display:grid;grid-template-columns:1fr 90px 90px;gap:10px;align-items:center;
+  padding:8px 0;border-bottom:1px solid var(--line)}
+.hrs b{font-family:var(--serif);font-weight:400;font-size:15px}
+.hrs input{min-height:40px}
+
+/* save bar */
+.save{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(246,241,231,.96);
+  border-top:1px solid var(--line);padding:12px 20px;backdrop-filter:blur(14px);
+}
+.save__in{max-width:820px;margin:0 auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.save__msg{flex:1;font-size:13px;color:var(--ink-60);min-width:160px}
+.btn{
+  min-height:46px;padding:0 20px;border-radius:3px;font-family:var(--mono);
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:8px;text-decoration:none;
+}
+.btn--go{background:var(--terra);color:#fff}
+.btn--out{border:1px solid var(--line);color:var(--ink)}
+.btn:active{transform:scale(.98)}
+
+dialog{
+  border:0;border-radius:6px;padding:0;max-width:520px;width:calc(100% - 32px);
+  box-shadow:0 20px 60px rgba(15,26,42,.3);
+}
+dialog::backdrop{background:rgba(12,20,32,.6)}
+.dlg{padding:26px 24px}
+.dlg h2{font-family:var(--serif);font-size:22px;margin:0 0 10px}
+.dlg ol{margin:0 0 18px;padding-left:20px;color:var(--ink-60);font-size:14px;line-height:1.9}
+.dlg code{font-family:var(--mono);font-size:12px;background:var(--cream-2);padding:2px 5px;border-radius:2px}
+.dlg .btn{width:100%;justify-content:center;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <h1>Off the Tracks — edit the site</h1>
+  <span class="bar__hint">Not public</span>
+</div>
+
+<div class="wrap">
+  <p class="intro">
+    <b>How this works</b>
+    Change anything below, press <strong>Save</strong>, and follow the two steps it shows you.
+    The site updates itself within a minute. Nothing here can break the site — if something
+    looks wrong, press Reset and start again.
+  </p>
+
+  <details open>
+    <summary>Today's board <em>changes most days</em></summary>
+    <div class="body">
+      <label><span>What's on today</span>
+        <input id="specialText" placeholder="Soup today: roasted tomato &amp; fennel"></label>
+      <p class="hint">Leave empty and the banner disappears from the site completely.</p>
+      <label><span>Small print (optional)</span>
+        <input id="specialUntil" placeholder="while it lasts"></label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Menu &amp; prices <em>food, drink, photos</em></summary>
+    <div class="body">
+      <label style="display:flex;align-items:center;gap:10px;margin-bottom:18px">
+        <input type="checkbox" id="showPrices" style="width:20px;min-height:20px;margin:0">
+        <span style="margin:0;text-transform:none;letter-spacing:0;font-family:var(--sans);
+                     font-size:14.5px;color:var(--ink)">Show prices on the website</span>
+      </label>
+      <div id="menu"></div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Opening hours <em>drives the "open now" badge</em></summary>
+    <div class="body">
+      <div id="hours"></div>
+      <p class="hint">24-hour clock: 9 is 9am, 16 is 4pm, 17 is 5pm.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Reviews <em>real ones only</em></summary>
+    <div class="body">
+      <div class="row2">
+        <label><span>Google rating</span><input id="revRating" type="number" step="0.1" min="0" max="5"></label>
+        <label><span>How many reviews</span><input id="revCount" type="number" min="0"></label>
+      </div>
+      <p class="hint">Both come straight from your Google listing. Leave the count at 0 to hide it.</p>
+      <div id="quotes"></div>
+      <button class="addrow" id="addQuote">+ Add a review quote</button>
+      <p class="hint">Only paste reviews people actually wrote. Made-up quotes are the fastest
+        way to lose someone's trust.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Contact <em>phone, email, socials</em></summary>
+    <div class="body">
+      <label><span>Phone</span><input id="phone" placeholder="+16046898700"></label>
+      <label><span>Email</span><input id="email"></label>
+      <label><span>Address</span><input id="address"></label>
+      <label><span>Instagram</span><input id="instagram"></label>
+      <label><span>Facebook</span><input id="facebook"></label>
+    </div>
+  </details>
+</div>
+
+<div class="save">
+  <div class="save__in">
+    <span class="save__msg" id="msg">Make your changes, then press Save.</span>
+    <button class="btn btn--out" id="reset">Reset</button>
+    <button class="btn btn--go" id="saveBtn">Save</button>
+  </div>
+</div>
+
+<dialog id="dlg">
+  <div class="dlg">
+    <h2>Two steps and you're live</h2>
+    <ol>
+      <li>Your new <code>content.js</code> is copied. (If not, press the copy button below.)</li>
+      <li>Open the file on GitHub, select all, paste, and press <strong>Commit changes</strong>.</li>
+    </ol>
+    <button class="btn btn--out" id="copyAgain">Copy the file again</button>
+    <a class="btn btn--go" id="ghLink" target="_blank" rel="noopener"
+       href="https://github.com/PITTAHAYA/off-the-tracks-cafe/edit/main/site/content.js">
+      Open GitHub and paste →</a>
+    <button class="btn btn--out" id="dlBtn">Download instead</button>
+  </div>
+</dialog>
+
+<script src="content.js"></script>
+<script>
+(function(){
+"use strict";
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+
+/* deep copy so Reset can restore the file as loaded */
+const ORIGINAL = JSON.parse(JSON.stringify(window.OTT_CONTENT || {}));
+let C = JSON.parse(JSON.stringify(ORIGINAL));
+
+const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const esc  = s => String(s == null ? "" : s);
+
+/* ── paint the form ─────────────────────────────────── */
+function paint(){
+  $("#specialText").value  = esc(C.special && C.special.text);
+  $("#specialUntil").value = esc(C.special && C.special.until);
+  $("#showPrices").checked = C.showPrices !== false;
+  $("#phone").value     = esc(C.phone);
+  $("#email").value     = esc(C.email);
+  $("#address").value   = esc(C.address);
+  $("#instagram").value = esc(C.instagram);
+  $("#facebook").value  = esc(C.facebook);
+  $("#revRating").value = (C.reviews && C.reviews.rating) || "";
+  $("#revCount").value  = (C.reviews && C.reviews.count)  || 0;
+
+  paintHours(); paintMenu(); paintQuotes();
+}
+
+function paintHours(){
+  $("#hours").innerHTML = [1,2,3,4,5,6,0].map(i=>`
+    <div class="hrs">
+      <b>${DAYS[i]}</b>
+      <input type="number" min="0" max="23" data-h="${i}" data-k="open"  value="${C.hours[i].open}">
+      <input type="number" min="0" max="23" data-h="${i}" data-k="close" value="${C.hours[i].close}">
+    </div>`).join("");
+  $$("[data-h]").forEach(inp=>inp.oninput = ()=>{
+    C.hours[+inp.dataset.h][inp.dataset.k] = +inp.value;
+    dirty();
+  });
+}
+
+function paintMenu(){
+  $("#menu").innerHTML = (C.menu || []).map((cat,ci)=>`
+    <div class="cat">
+      <div class="cat__h"><b>${cat.label}</b></div>
+      <div class="items">
+        ${cat.items.map((it,ii)=>`
+          <div class="item">
+            <input value="${esc(it.n).replace(/"/g,"&quot;")}" data-m="${ci}" data-i="${ii}" data-k="n">
+            <input value="${esc(it.p)}" data-m="${ci}" data-i="${ii}" data-k="p" placeholder="price">
+            <button class="del" data-del="${ci}:${ii}" aria-label="Remove ${esc(it.n)}">×</button>
+            <span class="item__ph ${it.img ? "" : "none"}">
+              ${it.img ? "photo: " + it.img : "no photo yet"}
+            </span>
+          </div>`).join("")}
+        <button class="addrow" data-add="${ci}">+ Add an item to ${cat.label}</button>
+      </div>
+    </div>`).join("");
+
+  $$("[data-m]").forEach(inp=>inp.oninput = ()=>{
+    C.menu[+inp.dataset.m].items[+inp.dataset.i][inp.dataset.k] = inp.value;
+    dirty();
+  });
+  $$("[data-del]").forEach(b=>b.onclick = ()=>{
+    const [ci,ii] = b.dataset.del.split(":").map(Number);
+    if(!confirm("Remove " + C.menu[ci].items[ii].n + "?")) return;
+    C.menu[ci].items.splice(ii,1); paintMenu(); dirty();
+  });
+  $$("[data-add]").forEach(b=>b.onclick = ()=>{
+    C.menu[+b.dataset.add].items.push({n:"New item", p:""});
+    paintMenu(); dirty();
+  });
+}
+
+function paintQuotes(){
+  const qs = (C.reviews && C.reviews.quotes) || [];
+  $("#quotes").innerHTML = qs.map((q,i)=>`
+    <label><span>Review ${i+1}</span>
+      <textarea data-q="${i}">${esc(q.text)}</textarea></label>
+    <div class="item" style="grid-template-columns:1fr 34px">
+      <input data-qw="${i}" value="${esc(q.who || "Google review").replace(/"/g,"&quot;")}"
+             placeholder="Google review">
+      <button class="del" data-qd="${i}" aria-label="Remove review ${i+1}">×</button>
+    </div>`).join("");
+  $$("[data-q]").forEach(t=>t.oninput  = ()=>{ C.reviews.quotes[+t.dataset.q].text = t.value; dirty(); });
+  $$("[data-qw]").forEach(t=>t.oninput = ()=>{ C.reviews.quotes[+t.dataset.qw].who  = t.value; dirty(); });
+  $$("[data-qd]").forEach(b=>b.onclick = ()=>{
+    C.reviews.quotes.splice(+b.dataset.qd,1); paintQuotes(); dirty();
+  });
+}
+
+$("#addQuote").onclick = ()=>{
+  C.reviews = C.reviews || {quotes:[]};
+  C.reviews.quotes = C.reviews.quotes || [];
+  C.reviews.quotes.push({text:"", who:"Google review"});
+  paintQuotes(); dirty();
+};
+
+/* ── simple fields ──────────────────────────────────── */
+const bind = (sel, set) => { $(sel).oninput = e => { set(e.target.value); dirty(); }; };
+bind("#specialText",  v=>{ C.special = C.special || {}; C.special.text = v; });
+bind("#specialUntil", v=>{ C.special = C.special || {}; C.special.until = v; });
+bind("#phone",     v=>C.phone = v);
+bind("#email",     v=>C.email = v);
+bind("#address",   v=>C.address = v);
+bind("#instagram", v=>C.instagram = v);
+bind("#facebook",  v=>C.facebook = v);
+bind("#revRating", v=>{ C.reviews = C.reviews||{}; C.reviews.rating = parseFloat(v)||0; });
+bind("#revCount",  v=>{ C.reviews = C.reviews||{}; C.reviews.count  = parseInt(v,10)||0; });
+$("#showPrices").onchange = e => { C.showPrices = e.target.checked; dirty(); };
+
+let changed = false;
+function dirty(){
+  changed = true;
+  $("#msg").textContent = "Unsaved changes.";
+  $("#msg").style.color = "var(--terra)";
+}
+
+/* ── produce the file ───────────────────────────────── */
+function fileText(){
+  return `/* ═══════════════════════════════════════════════════════════
+   OFF THE TRACKS — everything the café can change.
+   Edited with admin.html. Last saved ${new Date().toISOString().slice(0,10)}.
+   ═══════════════════════════════════════════════════════════ */
+window.OTT_CONTENT = ${JSON.stringify(C, null, 2)};
+`;
+}
+
+async function copyFile(){
+  const t = fileText();
+  try{ await navigator.clipboard.writeText(t); return true; }
+  catch(_){
+    const ta = document.createElement("textarea");
+    ta.value = t; ta.style.position = "fixed"; ta.style.opacity = 0;
+    document.body.appendChild(ta); ta.select();
+    const ok = document.execCommand("copy"); ta.remove(); return ok;
+  }
+}
+
+$("#saveBtn").onclick = async ()=>{
+  await copyFile();
+  $("#dlg").showModal();
+  changed = false;
+  $("#msg").textContent = "Saved — finish the two steps to go live.";
+  $("#msg").style.color = "var(--ink-60)";
+};
+$("#copyAgain").onclick = async ()=>{
+  const ok = await copyFile();
+  $("#copyAgain").textContent = ok ? "Copied ✓" : "Press ⌘C to copy";
+};
+$("#dlBtn").onclick = ()=>{
+  const blob = new Blob([fileText()], {type:"text/javascript"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "content.js";
+  a.click(); URL.revokeObjectURL(a.href);
+};
+$("#reset").onclick = ()=>{
+  if(changed && !confirm("Throw away your changes?")) return;
+  C = JSON.parse(JSON.stringify(ORIGINAL));
+  paint(); changed = false;
+  $("#msg").textContent = "Back to the last saved version.";
+  $("#msg").style.color = "var(--ink-60)";
+};
+
+addEventListener("beforeunload", e=>{ if(changed){ e.preventDefault(); e.returnValue = ""; } });
+
+paint();
+})();
+</script>
+</body>
+</html>

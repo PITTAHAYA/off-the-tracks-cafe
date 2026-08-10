@@ -152,3 +152,36 @@ provider (OpenTable, Tock, Resy), then set both `DEMO_MODE` flags to `false`.
   Pillow snippet in the git history for commit `8ffa1a0`.
 - If you edit `app.css` and don't see the change, hard-refresh — and if the site is
   installed, the service worker holds a copy too: bump `CACHE` in `sw.js`.
+
+## Editing the site — admin.html
+
+`site/admin.html` is a browser editor for `content.js`. Not linked from the site,
+`noindex`, and disallowed in `robots.txt`.
+
+Open it, change what you need, press **Save**. It copies the new `content.js` and
+opens GitHub at the right file — select all, paste, Commit. Vercel redeploys in about
+a minute. No terminal, no build, no account beyond GitHub.
+
+It covers: today's board, every menu item and price, the price on/off switch, opening
+hours, Google rating and review quotes, and all contact details. Reset restores the
+last saved version, and it warns before you navigate away with unsaved changes.
+
+The generated file is validated on save — it's plain `window.OTT_CONTENT = {…}`, so a
+typo can't take the site down; `app.js` falls back to sane defaults if it fails to load.
+
+## Photos still needed
+
+Seven menu items have no photo — see `PHOTO-SHOTLIST.md`. They render the house mark
+on a cream weave rather than a broken tile, so the grid still looks finished, but a
+photo sells a sandwich and a placeholder doesn't. Roughly twenty minutes of shooting.
+
+## Reviews
+
+`content.js` → `reviews`. Rating is the real 4.0 from the Google listing; `count` is
+0 until the real number is filled in. **`quotes` starts empty on purpose** — the
+section renders the rating and a link to Google with no quotes at all rather than
+showing invented ones. Paste real reviews through admin.html.
+
+Worth knowing: the Google listing currently has **no website linked** ("Add website").
+Adding this URL there is free and is probably the single highest-return five minutes
+available.
