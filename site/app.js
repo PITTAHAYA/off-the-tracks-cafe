@@ -222,12 +222,15 @@ $$(".rv").forEach(el=>io.observe(el));
       </div>
     </article>`;
 
-  const row = it => `<div class="mrow">
-      <span class="mrow__n">${it.n}${it.note ? `<i>${it.note}</i>` : ``}</span>
-      ${has(it) ? `<span class="mrow__dot"></span>${price(it)}` : ``}
+  const row = it => {
+    const sub = [it.sizes, it.note].filter(Boolean).join("  ·  ");
+    return `<div class="mrow">
+      <span class="mrow__n">${it.n}</span>
+      ${has(it) ? `<span class="mrow__dot"></span>${price(it)}` : `<span class="mrow__dot"></span>`}
       ${addBtn(it)}
-      ${it.sizes ? `<span class="mrow__sizes">${it.sizes}</span>` : ``}
+      ${sub ? `<span class="mrow__sub">${sub}</span>` : ``}
     </div>`;
+  };
 
   /* A tidy descriptive list — name + price on a line, ingredients under,
      bread note under that. Uniform, orderly, no ragged card heights. */

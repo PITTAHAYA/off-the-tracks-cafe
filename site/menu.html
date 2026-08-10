@@ -90,17 +90,16 @@
   text-transform:uppercase;color:var(--ink-40)}
 .litem .chip{transform:translateY(-1px)}
 
-/* rows — name, and nothing it doesn't need */
+/* rows — name · · · price +, with sizes on a quiet second line */
 .mrows{border-top:1px solid var(--line)}
-.mrow{display:flex;align-items:baseline;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
+.mrow{display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;padding:14px 0;
+  border-bottom:1px solid var(--line)}
 .mrow__n{font-family:var(--serif);font-size:18px;font-weight:600;flex:none}
-.mrow__n i{
-  font-style:normal;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--ink-40);margin-left:9px;
-}
-.mrow__dot{flex:1;border-bottom:1px dotted rgba(27,26,23,.3);transform:translateY(-4px)}
-.mrow__sizes{flex-basis:100%;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
-  color:var(--ink-40);margin-top:2px}
+.mrow__dot{flex:1;border-bottom:1px dotted rgba(27,26,23,.28);transform:translateY(-2px);min-width:20px}
+.mrow .price{flex:none}
+.mrow .add{flex:none;margin:0}
+.mrow__sub{flex-basis:100%;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--ink-40);margin-top:5px}
 
 .legend{
   margin:0 auto;padding:0 var(--pad) 34px;max-width:var(--maxw);
