@@ -90,8 +90,9 @@ p{margin:0 0 .9em}
 .line{
   position:fixed;left:0;right:0;bottom:0;z-index:80;height:var(--nav);
   padding-bottom:env(safe-area-inset-bottom,0px);
-  background:rgba(246,241,231,.95);border-top:1px solid var(--line);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  /* fully opaque — nothing from the page shows through the bar */
+  background:var(--cream);border-top:1px solid var(--line);
+  box-shadow:0 -8px 24px rgba(27,26,23,.09);
   display:flex;
 }
 .line::before{                       /* the rail itself */
