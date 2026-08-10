@@ -19,6 +19,19 @@ window.OTT_CONTENT = {
   /* Show prices on the site? Set false to hide every price. */
   showPrices: true,
 
+  /* ── drink customization (the pickup flow) ──────────────
+     d = the extra charge for that choice. Alt milks and extras
+     cost more; size deltas are worked out from the oz options.  */
+  mods: {
+    milk:  [ {n:"Whole"}, {n:"2%"}, {n:"Oat", d:0.75}, {n:"Almond", d:0.75},
+             {n:"Soy", d:0.75}, {n:"Coconut", d:0.75} ],
+    sweet: [ {n:"No sugar"}, {n:"A little"}, {n:"Regular"}, {n:"Extra" } ],
+    ice:   [ {n:"Regular ice"}, {n:"Light ice"}, {n:"No ice"} ],
+    extras:[ {n:"Extra shot", d:1.00}, {n:"Flavour syrup", d:0.75},
+             {n:"Whipped cream", d:0.75} ],
+    sides: [ {n:"Kettle chips"}, {n:"Bistro salad"} ]
+  },
+
   /* ── today's board ──────────────────────────────────────
      Leave `text` empty to hide the banner completely.
      This is the one thing worth changing most days.        */
@@ -54,37 +67,38 @@ window.OTT_CONTENT = {
      img: a file in assets/ (e.g. "IMG_4180.jpg"). Leave it out
      and the card shows a placeholder until a photo exists.  */
   menu: [
-    { id:"coffee", label:"Coffee", style:"rows",
+    { id:"coffee", label:"Coffee", style:"rows", customize:true,
       foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
       items:[
-        {n:"Drip Coffee",          p:"3.50", sizes:"8 · 12 · 16oz"},
-        {n:"Iced Drip Coffee",     p:"4.00", sizes:"12 · 16oz"},
-        {n:"Espresso",             p:"3.25", sizes:"2oz"},
+        {n:"Drip Coffee",          p:"3.50", sizes:"8 · 12 · 16oz", noIce:true},
+        {n:"Iced Drip Coffee",     p:"4.00", sizes:"12 · 16oz", iced:true},
+        {n:"Espresso",             p:"3.25", sizes:"2oz", milk:false, noIce:true},
         {n:"Americano",            p:"3.75", sizes:"8 · 12 · 16oz"},
         {n:"Latte",                p:"5.00", sizes:"8 · 12 · 16oz"},
         {n:"Cappuccino",           p:"5.00", sizes:"8 · 12 · 16oz"},
         {n:"Mocha",                p:"5.50", sizes:"8 · 12 · 16oz"},
         {n:"White Chocolate Mocha",p:"5.75", sizes:"8 · 12 · 16oz"},
-        {n:"Cortado",              p:"4.25", sizes:"5oz"},
-        {n:"Flat White",           p:"4.75", sizes:"8oz"},
-        {n:"Espresso Macchiato",   p:"3.75", sizes:"3oz"},
+        {n:"Cortado",              p:"4.25", sizes:"5oz", noIce:true},
+        {n:"Flat White",           p:"4.75", sizes:"8oz", noIce:true},
+        {n:"Espresso Macchiato",   p:"3.75", sizes:"3oz", noIce:true},
         {n:"Caramel Macchiato",    p:"5.75", sizes:"8 · 12 · 16oz"},
         {n:"Dirty Chai Latte",     p:"5.75", sizes:"8 · 12 · 16oz"}
     ]},
 
-    { id:"noncoffee", label:"Non-Coffee", style:"rows",
-      foot:"Add-ons: oat, almond, soy or coconut milk · syrups · whipped cream · espresso shot · liqueur.",
+    { id:"noncoffee", label:"Non-Coffee", style:"rows", customize:true,
+      foot:"Alt milks, syrups, an extra shot or whipped cream — add them when you order.",
       items:[
         {n:"Matcha Latte",    p:"5.75", sizes:"8 · 12 · 16oz"},
         {n:"Chai Latte",      p:"5.25", sizes:"8 · 12 · 16oz"},
         {n:"Turmeric Latte",  p:"5.25", sizes:"8 · 12 · 16oz"},
         {n:"London Fog",      p:"5.00", sizes:"8 · 12 · 16oz"},
-        {n:"Hot Chocolate",   p:"4.75", sizes:"8 · 12 · 16oz"},
-        {n:"Tea",             p:"4.00", sizes:"8 · 12 · 16oz", note:"hot or iced"},
-        {n:"Lemonade",        p:"5.50", sizes:"8 · 12 · 16oz", note:"mango · coconut · strawberry · plain"}
+        {n:"Hot Chocolate",   p:"4.75", sizes:"8 · 12 · 16oz", noIce:true},
+        {n:"Tea",             p:"4.00", sizes:"8 · 12 · 16oz", milk:false},
+        {n:"Lemonade",        p:"5.50", sizes:"8 · 12 · 16oz", milk:false, iced:true,
+                              note:"mango · coconut · strawberry · plain"}
     ]},
 
-    { id:"sandwiches", label:"Sandwiches", style:"list",
+    { id:"sandwiches", label:"Sandwiches", style:"list", side:true,
       foot:"Made fresh in-house. Served with kettle chips or bistro salad.",
       items:[
         {n:"Sunrise Sandwich", p:"14.00", img:"IMG_4184.jpg", tag:"Favourite",

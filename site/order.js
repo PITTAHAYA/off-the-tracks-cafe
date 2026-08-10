@@ -31,10 +31,12 @@ const subtotal = () => cart.reduce((n,i)=>n + i.p * i.q, 0);
 const tax      = () => subtotal() * GST;
 const total    = () => subtotal() + tax();
 
-function add(id, n, p){
+const slug = n => n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+
+function add(id, n, p, sub){
   const found = cart.find(i=>i.id === id);
   if(found) found.q++;
-  else cart.push({id, n, p:parseFloat(p), q:1});
+  else cart.push({id, n, p:parseFloat(p), q:1, sub:sub||""});
   save(); paint(); bump();
 }
 function setQty(id, q){
@@ -117,7 +119,10 @@ function viewCart(){
     <div class="lines">
       ${cart.map(i=>`
         <div class="cline">
-          <span class="cline__n">${i.n}</span>
+          <div class="cline__main">
+            <span class="cline__n">${i.n}</span>
+            ${i.sub ? `<span class="cline__sub">${i.sub}</span>` : ``}
+          </div>
           <span class="cline__p">${money(i.p * i.q)}</span>
           <div class="qty">
             <button data-q="${i.id}" data-v="${i.q-1}" aria-label="One fewer ${i.n}">−</button>
@@ -239,6 +244,161 @@ function paint(){
   if(sheet.classList.contains("open") && step === "cart") render();
 }
 
+/* ═══════════════════════════════════════════════════════════
+   CUSTOMIZE — size, milk, sweetness, ice, extras, a side.
+   A second bottom sheet that opens over the menu. Drinks with any
+   option open it; plain items (baked) add in one tap.
+   ═══════════════════════════════════════════════════════════ */
+const M = () => OTT.MODS || {};
+const ICE_G = () => ({key:"ice", label:"Ice", choices:M().ice || []});
+
+function buildGroups(item, cat){
+  const G = [];
+  const sizes = (item.sizes || "").match(/\d+/g);
+  if(sizes && sizes.length > 1){
+    const d = sizes.length >= 3 ? [0, 0.60, 1.10] : [0, 0.60];
+    G.push({key:"size", label:"Size", choices: sizes.map((s,i)=>({n:s+"oz", d:d[i]||0}))});
+  }
+  if(cat.customize){
+    if(!item.iced && !item.noIce)
+      G.push({key:"temp", label:"Temperature", choices:[{n:"Hot"},{n:"Iced"}]});
+    if(item.milk !== false && (M().milk||[]).length)
+      G.push({key:"milk", label:"Milk", choices:M().milk});
+    if((M().sweet||[]).length)
+      G.push({key:"sweet", label:"Sweetness", choices:M().sweet, def:2});
+    if((M().extras||[]).length)
+      G.push({key:"extras", label:"Add anything", multi:true, choices:M().extras});
+  }
+  if(cat.side && (M().sides||[]).length)
+    G.push({key:"side", label:"Choose a side", choices:M().sides});
+  return G;
+}
+
+let cst = null;
+
+function icedNow(){
+  if(cst.item.iced) return true;
+  const t = cst.groups.find(g=>g.key==="temp");
+  return !!(t && cst.sel.temp === 1);
+}
+/* base groups, with an Ice group revealed whenever the drink is iced */
+function displayGroups(){
+  const out = [];
+  if(cst.item.iced){                        // always-iced: ice sits after size
+    for(const g of cst.groups){ out.push(g); if(g.key==="size") out.push(ICE_G()); }
+    if(!cst.groups.some(g=>g.key==="size")) out.unshift(ICE_G());
+  } else {
+    for(const g of cst.groups){ out.push(g); if(g.key==="temp" && icedNow()) out.push(ICE_G()); }
+  }
+  return out;
+}
+function custPrice(){
+  let p = parseFloat(cst.item.p);
+  displayGroups().forEach(g=>{
+    if(g.multi) return;
+    const c = g.choices[cst.sel[g.key]||0];
+    if(c && c.d) p += c.d;
+  });
+  cst.extras.forEach(i=> p += (M().extras[i].d || 0));
+  return p;
+}
+
+const csheet = document.createElement("div");
+csheet.className = "sheet";
+csheet.innerHTML = `
+  <div class="sheet__scrim" data-cclose></div>
+  <div class="sheet__panel" role="dialog" aria-modal="true" aria-label="Customize your order">
+    <button class="sheet__x" data-cclose aria-label="Close">×</button>
+    <div class="sheet__body" id="csheetBody"></div>
+  </div>`;
+document.body.appendChild(csheet);
+csheet.addEventListener("click", e=>{ if(e.target.closest("[data-cclose]")) closeCSheet(); });
+addEventListener("keydown", e=>{ if(e.key==="Escape" && csheet.classList.contains("open")) closeCSheet(); });
+
+function openCSheet(){
+  csheet.classList.add("open");
+  requestAnimationFrame(()=>csheet.classList.add("show"));
+  document.body.style.overflow = "hidden";
+  $(".sheet__x", csheet).focus();
+}
+function closeCSheet(){
+  csheet.classList.remove("show");
+  setTimeout(()=>{ csheet.classList.remove("open"); document.body.style.overflow=""; }, 280);
+}
+
+function openCustomize(item, cat){
+  const groups = buildGroups(item, cat);
+  if(!groups.length){ add(slug(item.n), item.n, item.p); OTT.toast(item.n + " added"); return; }
+  cst = { item, cat, groups, sel:{}, extras:new Set(), qty:1 };
+  groups.forEach(g=>{ if(!g.multi) cst.sel[g.key] = g.def || 0; });
+  renderCustomize();
+  openCSheet();
+}
+
+function renderCustomize(){
+  const it = cst.item;
+  if(cst.sel.ice === undefined) cst.sel.ice = 0;
+  const groups = displayGroups();
+  $("#csheetBody", csheet).innerHTML = `
+    <p class="eyebrow">Make it yours</p>
+    <h2 class="sheet__h">${it.n}</h2>
+    ${groups.map(g=>`
+      <div class="optg">
+        <div class="optg__l">${g.label}</div>
+        <div class="chips2">
+          ${g.choices.map((c,i)=>{
+            const on = g.multi ? cst.extras.has(i) : (cst.sel[g.key]||0) === i;
+            const attr = g.multi ? `data-x="${i}"` : `data-g="${g.key}" data-i="${i}"`;
+            return `<button class="chip3" ${attr} aria-checked="${on}">${c.n}${c.d?`<i>+$${c.d.toFixed(2)}</i>`:``}</button>`;
+          }).join("")}
+        </div>
+      </div>`).join("")}
+    <div class="cqty">
+      <span class="optg__l">Quantity</span>
+      <div class="qty">
+        <button id="cqMinus" aria-label="One fewer">−</button>
+        <span aria-live="polite">${cst.qty}</span>
+        <button id="cqPlus" aria-label="One more">+</button>
+      </div>
+    </div>
+    <button class="btn btn--fill" id="cAdd">Add to order — ${money(custPrice()*cst.qty)}</button>`;
+
+  const b = $("#csheetBody", csheet);
+  $$("[data-g]", b).forEach(el=>el.onclick = ()=>{ cst.sel[el.dataset.g] = +el.dataset.i; renderCustomize(); });
+  $$("[data-x]", b).forEach(el=>el.onclick = ()=>{
+    const i = +el.dataset.x; cst.extras.has(i) ? cst.extras.delete(i) : cst.extras.add(i); renderCustomize();
+  });
+  $("#cqMinus", b).onclick = ()=>{ cst.qty = Math.max(1, cst.qty-1); renderCustomize(); };
+  $("#cqPlus", b).onclick  = ()=>{ cst.qty++; renderCustomize(); };
+  $("#cAdd", b).onclick = commitCustomize;
+}
+
+/* human summary of the non-default choices, e.g. "12oz · Oat · Iced · Extra shot" */
+function commitCustomize(){
+  const it = cst.item, parts = [];
+  displayGroups().forEach(g=>{
+    if(g.multi) return;
+    const idx = cst.sel[g.key] || 0, c = g.choices[idx];
+    if(!c) return;
+    if(g.key === "size")       parts.push(c.n);
+    else if(g.key === "temp"){ if(idx === 1) parts.push("Iced"); }
+    else if(g.key === "milk"){ if(idx !== 0) parts.push(c.n); }
+    else if(g.key === "sweet"){ if(idx !== 2) parts.push(c.n); }
+    else if(g.key === "ice"){  if(idx !== 0) parts.push(c.n); }
+    else if(g.key === "side")  parts.push(c.n);
+  });
+  [...cst.extras].sort((a,b)=>a-b).forEach(i=> parts.push(M().extras[i].n));
+  const sub = parts.join("  ·  ");
+  const id = slug(it.n) + "|" + sub.toLowerCase().replace(/[^a-z0-9]+/g,"");
+  const unit = custPrice();
+  const found = cart.find(x=>x.id === id);
+  if(found) found.q += cst.qty;
+  else cart.push({id, n:it.n, p:unit, q:cst.qty, sub});
+  save(); paint(); bump();
+  closeCSheet();
+  OTT.toast(it.n + " added");
+}
+
 /* Add buttons are injected by menu.html after each render */
 window.OTT_ORDER = {
   add,
@@ -246,8 +406,10 @@ window.OTT_ORDER = {
     $$("[data-add]", root).forEach(b=>{
       b.onclick = e=>{
         e.preventDefault(); e.stopPropagation();
-        add(b.dataset.add, b.dataset.name, b.dataset.price);
-        OTT.toast(b.dataset.name + " added");
+        const cat  = (OTT.MENU || []).find(c=>c.id === b.dataset.cat);
+        const item = cat && cat.items.find(x=>x.n === b.dataset.name);
+        if(item) openCustomize(item, cat);
+        else { add(b.dataset.add, b.dataset.name, b.dataset.price); OTT.toast(b.dataset.name + " added"); }
       };
     });
   }

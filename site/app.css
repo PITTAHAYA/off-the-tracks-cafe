@@ -234,9 +234,31 @@ p{margin:0 0 .9em}
   display:grid;grid-template-columns:1fr auto;gap:4px 14px;align-items:center;
   padding:14px 0;border-bottom:1px solid var(--line);
 }
+.cline__main{display:flex;flex-direction:column;gap:2px}
 .cline__n{font-family:var(--serif);font-size:17px;font-weight:600}
+.cline__sub{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink-40);line-height:1.5}
 .cline__p{font-family:var(--mono);font-size:13px;color:var(--terra)}
 .qty{grid-column:1/-1;display:flex;align-items:center;gap:14px;margin-top:2px}
+
+/* customization options */
+.optg{margin:0 0 20px}
+.optg__l{
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-40);margin-bottom:9px;
+}
+.chips2{display:flex;flex-wrap:wrap;gap:8px}
+.chip3{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:9px 14px;border-radius:100px;border:1px solid var(--line);
+  font-size:14px;color:var(--ink);transition:all .2s var(--ease);min-height:40px;
+}
+.chip3 i{font-style:normal;font-family:var(--mono);font-size:10px;color:var(--ink-40)}
+.chip3[aria-checked="true"]{background:var(--navy);border-color:var(--navy);color:var(--cream)}
+.chip3[aria-checked="true"] i{color:var(--brass)}
+.cqty{display:flex;align-items:center;justify-content:space-between;
+  margin:4px 0 22px;padding-top:16px;border-top:1px solid var(--line)}
+.cqty .optg__l{margin:0}
 .qty button{
   width:30px;height:30px;border:1px solid var(--line);border-radius:50%;
   display:grid;place-items:center;font-size:15px;color:var(--ink);

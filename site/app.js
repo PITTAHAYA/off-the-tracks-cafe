@@ -193,12 +193,14 @@ $$(".rv").forEach(el=>io.observe(el));
   const tabs = $("#tabs"), panel = $("#panel");
   if(!tabs || !panel) return;
 
+  let RCAT = "";   // id of the category currently being rendered
   const has   = it => SHOW_PRICES && !!it.p;
   const price = it => has(it) ? `<span class="price">$${it.p}</span>` : ``;
   const slug  = n => n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
   /* Orderable only when it has a price — you can't add a "market price" item */
   const addBtn = it => has(it)
-    ? `<button class="add" data-add="${slug(it.n)}" data-name="${it.n}" data-price="${it.p}"
+    ? `<button class="add" data-add="${slug(it.n)}" data-cat="${RCAT}"
+               data-name="${it.n}" data-price="${it.p}"
                aria-label="Add ${it.n} to your order">+</button>`
     : ``;
 
@@ -246,6 +248,7 @@ $$(".rv").forEach(el=>io.observe(el));
 
   function render(id){
     const c = MENU.find(m=>m.id===id);
+    RCAT = c.id;
     const hero = c.hero
       ? `<figure class="mhero">
            <img class="fade" loading="lazy" src="${IMG(c.hero.img)}" alt="${c.hero.cap}">
@@ -416,7 +419,7 @@ addEventListener("beforeinstallprompt", e=>{
 /* ═══════════ shared API for order.js and reserve.js ═══════════
    Keeps hours, time formatting and the toast in one place so the
    ordering and booking flows can never drift from the real hours. */
-window.OTT = { HOURS, MENU, PHONE, EMAIL, ADDRESS, SOCIAL, vanNow, fmt, clock, toast };
+window.OTT = { HOURS, MENU, MODS:C.mods||{}, PHONE, EMAIL, ADDRESS, SOCIAL, vanNow, fmt, clock, toast };
 
 /* ═══════════ hero parallax (home only) ═══════════ */
 (function(){
