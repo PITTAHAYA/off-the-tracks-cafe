@@ -229,6 +229,18 @@ $$(".rv").forEach(el=>io.observe(el));
       ${it.sizes ? `<span class="mrow__sizes">${it.sizes}</span>` : ``}
     </div>`;
 
+  /* A tidy descriptive list — name + price on a line, ingredients under,
+     bread note under that. Uniform, orderly, no ragged card heights. */
+  const listRow = it => `<div class="litem">
+      <div class="litem__top">
+        <h3>${it.n}${it.diet ? it.diet.map(c=>`<span class="chip">${c}</span>`).join("") : ``}</h3>
+        <span class="litem__line"></span>
+        ${price(it)}${addBtn(it)}
+      </div>
+      ${it.d  ? `<p class="litem__d">${it.d}</p>` : ``}
+      ${it.on ? `<p class="litem__on">${it.on}</p>` : ``}
+    </div>`;
+
   function render(id){
     const c = MENU.find(m=>m.id===id);
     const hero = c.hero
@@ -237,14 +249,15 @@ $$(".rv").forEach(el=>io.observe(el));
            <figcaption>${c.hero.cap}</figcaption>
          </figure>` : ``;
     const foot = c.foot ? `<p class="mfoot">${c.foot}</p>` : ``;
-    const body = c.style === "cards"
-      ? `<div class="mgrid">${c.items.map(card).join("")}</div>`
-      : `<div class="mrows">${c.items.map(row).join("")}</div>`;
+    const body =
+        c.style === "cards" ? `<div class="mgrid">${c.items.map(card).join("")}</div>`
+      : c.style === "list"  ? `<div class="mlist">${c.items.map(listRow).join("")}</div>`
+      :                       `<div class="mrows">${c.items.map(row).join("")}</div>`;
     panel.innerHTML = hero + body + foot;
     fadeIn(panel);
     if(window.OTT_ORDER) window.OTT_ORDER.bind(panel);
     if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    $$(".mcard, .mrow", panel).forEach((el,i)=>{
+    $$(".mcard, .mrow, .litem", panel).forEach((el,i)=>{
       el.style.opacity = 0; el.style.transform = "translateY(12px)";
       setTimeout(()=>{
         el.style.transition = "opacity .45s var(--ease), transform .45s var(--ease)";

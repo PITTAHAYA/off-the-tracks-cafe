@@ -55,7 +55,6 @@ window.OTT_CONTENT = {
      and the card shows a placeholder until a photo exists.  */
   menu: [
     { id:"coffee", label:"Coffee", style:"rows",
-      hero:{img:"IMG_4177.jpg", cap:"Pulled on a vintage Synesso"},
       foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
       items:[
         {n:"Drip Coffee",          sizes:"8 · 12 · 16oz"},
@@ -85,7 +84,7 @@ window.OTT_CONTENT = {
         {n:"Lemonade",        sizes:"8 · 12 · 16oz", note:"mango · coconut · strawberry · plain"}
     ]},
 
-    { id:"sandwiches", label:"Sandwiches", style:"cards",
+    { id:"sandwiches", label:"Sandwiches", style:"list",
       foot:"Made fresh in-house. Served with kettle chips or bistro salad.",
       items:[
         {n:"Sunrise Sandwich", p:"14.00", img:"IMG_4184.jpg", tag:"Favourite",

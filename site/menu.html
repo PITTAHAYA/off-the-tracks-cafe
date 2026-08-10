@@ -77,6 +77,19 @@
   font-size:13.5px;line-height:1.55;color:var(--ink-60);max-width:46ch;
 }
 
+/* descriptive list — orderly rows for sandwiches */
+.mlist{border-top:1px solid var(--line)}
+.litem{padding:16px 0;border-bottom:1px solid var(--line)}
+.litem__top{display:flex;align-items:baseline;gap:12px}
+.litem__top h3{font-size:18px;flex:none;display:flex;align-items:baseline;gap:8px}
+.litem__line{flex:1;border-bottom:1px dotted rgba(27,26,23,.28);transform:translateY(-4px)}
+.litem__top .price{font-size:13px}
+.litem__top .add{margin-left:2px}
+.litem__d{margin:5px 0 0;font-size:13.5px;line-height:1.5;color:var(--ink-60);max-width:52ch}
+.litem__on{margin:3px 0 0;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-40)}
+.litem .chip{transform:translateY(-1px)}
+
 /* rows — name, and nothing it doesn't need */
 .mrows{border-top:1px solid var(--line)}
 .mrow{display:flex;align-items:baseline;gap:12px;padding:15px 0;border-bottom:1px solid var(--line)}
@@ -135,6 +148,9 @@
     break-inside:avoid;border-top:1px solid var(--line);border-bottom:0;
     padding:14px 0;
   }
+  /* sandwiches: two orderly descriptive columns */
+  .mlist{columns:2;column-gap:56px;border-top:0}
+  .litem{break-inside:avoid;border-top:1px solid var(--line);border-bottom:0}
   .mfoot,.legend{text-align:center}
   .legend{justify-content:center}
 }
