@@ -421,6 +421,26 @@ addEventListener("beforeinstallprompt", e=>{
    ordering and booking flows can never drift from the real hours. */
 window.OTT = { HOURS, MENU, MODS:C.mods||{}, PHONE, EMAIL, ADDRESS, SOCIAL, vanNow, fmt, clock, toast };
 
+/* ═══════════ demo disclaimer footer ═══════════ */
+(function(){
+  const foot = document.createElement("footer");
+  foot.className = "demo-foot";
+  foot.innerHTML =
+    '<div class="demo-foot__brand">' +
+      '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2"/>' +
+      '<path d="M8 8l8 8M16 8l-8 8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>' +
+      'Built by Pittahaya</div>' +
+    '<p>This website is a <strong style="color:rgba(246,241,231,.85)">demonstration concept</strong> ' +
+      'created by <a href="https://www.pittahaya.com" target="_blank" rel="noopener">Pittahaya</a>. ' +
+      'All photographs are used strictly for presentation purposes.</p>' +
+    '<span class="demo-foot__sep"></span>' +
+    '<p>If you are the business owner and do not wish to proceed with our services, ' +
+      'this site will be taken down immediately upon request. ' +
+      'For any questions or concerns, reach us at ' +
+      '<a href="https://www.pittahaya.com" target="_blank" rel="noopener">pittahaya.com</a>.</p>';
+  document.body.appendChild(foot);
+})();
+
 /* ═══════════ hero parallax (home only) ═══════════ */
 (function(){
   const media = $("#heroMedia"); if(!media) return;
