@@ -55,7 +55,7 @@ window.OTT_CONTENT = {
      and the card shows a placeholder until a photo exists.  */
   menu: [
     { id:"coffee", label:"Coffee", style:"rows",
-      hero:{img:"IMG_4174.jpg", cap:"Cappuccino, on the terrace"},
+      hero:{img:"IMG_4177.jpg", cap:"Pulled on a vintage Synesso"},
       foot:"Direct-trade beans from a local roaster, pulled on a vintage Synesso.",
       items:[
         {n:"Drip Coffee",          sizes:"8 · 12 · 16oz"},

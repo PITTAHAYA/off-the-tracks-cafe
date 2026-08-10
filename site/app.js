@@ -202,21 +202,14 @@ $$(".rv").forEach(el=>io.observe(el));
                aria-label="Add ${it.n} to your order">+</button>`
     : ``;
 
-  /* Items awaiting a photo get the house mark rather than a broken tile,
-     so the grid still reads as finished while the shot list gets done. */
-  const placeholder = it => `<div class="mcard__ph mcard__ph--none" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.1"/>
-        <path d="M3.5 12h17M7 9v6M11 9v6M15 9v6" stroke="currentColor"
-              stroke-width="1.1" stroke-linecap="round"/>
-      </svg>
-    </div>`;
-
-  const card = it => `<article class="mcard">
+  /* Items without a photo drop the image block entirely and render as a
+     simple text card — no placeholder square. align-items:start keeps them
+     compact beside the taller photo cards. */
+  const card = it => `<article class="mcard${it.img ? "" : " mcard--text"}">
       ${it.img ? `<div class="mcard__ph">
         <img class="fade" loading="lazy" src="${IMG(it.img,"sm")}" alt="${it.n}">
         ${it.tag ? `<span class="mcard__tag">${it.tag}</span>` : ``}
-      </div>` : placeholder(it)}
+      </div>` : ``}
       <div class="mcard__in">
         <h3>${it.n}</h3>
         ${it.d ? `<p class="mcard__d">${it.d}</p>` : ``}
